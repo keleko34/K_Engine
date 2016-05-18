@@ -1,0 +1,50 @@
+{
+  "name": "K_Engine",
+  "main": "client/frame/launcher.html",
+  "window": {
+    "frame": false,
+    "toolbar": false
+  },
+  "version": "0.0.0",
+  "description": "WEBGL Node-Webkit Engine",
+  "keywords": [
+    "WEBGL",
+    "Game Engine",
+    "Node-Webkit"
+  ],
+  "author": {
+    "name": "Keleko34",
+    "email": "gregory.guidero@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Gregory Guidero"
+    }
+  ],
+  "license": {
+    "type": "MIT",
+    "url": "http://en.wikipedia.org/wiki/MIT_License"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/keleko34/K_Engine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/keleko34/K_Engine/issues"
+  },
+  "dependencies": {
+    "nw": "^0.14.5-sdk",
+    "studio": "^0.13.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node_modules\\nw\\nwjs\\nw ."
+  },
+  "maintainers": [
+    {
+      "name": "keleko34",
+      "email": "gregory.guidero@gmail.com"
+    }
+  ],
+  "directories": {}
+}

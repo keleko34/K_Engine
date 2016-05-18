@@ -1,0 +1,30 @@
+body{
+  margin:0;
+}
+h1{
+  margin:0;
+  padding:0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 20px;
+  padding:0;
+}
+#topBar{
+  background:#CCC;
+  height:20px;
+  width:100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+#close {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  right: 2px;
+  width:16px;
+  height:16px;
+  top:2px;
+  text-align: center;
+  font-size: 12px;
+  padding:0;
+}
