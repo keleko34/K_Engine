@@ -1,6 +1,5 @@
-function CreateWindowControls(){
-
-  var _Window = window.require('nw.gui').Window.get(),
+module.exports = function(){
+  var _Window = WindowElements.gui.Window.get(),
       _onResize = [],
       _onClose = [],
       _onMinimize = [];
@@ -8,11 +7,11 @@ function CreateWindowControls(){
   function WindowControls()
   {
     var x=0;
-    document.getElementById('close').onclick = function(){
+    WindowElements.close.onclick = function(){
       _Window.close();
     }
 
-    document.getElementById('minimize').onclick = function(){
+    WindowElements.minimize.onclick = function(){
       _Window.minimize();
     }
 
@@ -31,7 +30,6 @@ function CreateWindowControls(){
     for(x=0;x<_onResize.length;x++){
       _Window.on('resize',_onResize[x]);
     }
-
   }
 
   WindowControls.Window = function(){

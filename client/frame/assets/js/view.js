@@ -1,6 +1,6 @@
-function CreateViewPort(){
+module.exports = function(){
   console.log();
-  var _View = document.getElementById('viewport'),
+  var _View = WindowElements.viewport,
       _Context = _View.getContext('2d'),
       _width = 0,
       _height = 0,

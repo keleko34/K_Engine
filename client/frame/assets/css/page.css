@@ -10,7 +10,7 @@ h1{
   line-height: 20px;
   padding:0;
 }
-#topBar{
+#topbar{
   background:#CCC;
   height:20px;
   width:100%;
@@ -42,4 +42,36 @@ h1{
   text-align: center;
   font-size: 8px;
   line-height: 0px;
+}
+
+#debug{
+  position: absolute;
+  background: rgba(255,255,255,0.1);
+  top: 20px;
+  width: 100%;
+  color: #FFF;
+  font-size: 12px;
+}
+
+#debug ul{
+  list-style: none;
+  margin:0;
+  padding:0;
+  position: absolute;
+  left: 30px;
+  top: 0px;
+}
+
+#debug li{
+  margin:1px 3px 0px 0px;
+  padding:0;
+  float:left;
+}
+
+.debugTitle{
+  font-size: 14px;
+}
+
+.hide{
+  display: none;
 }
