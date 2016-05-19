@@ -31,10 +31,24 @@ h1{
   line-height: 8px;
 }
 
+#maximize {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  right: 19px;
+  width: 14px;
+  height: 14px;
+  padding: 0px;
+  padding-bottom: 4px;
+  top: 2px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 0px;
+}
+
 #minimize {
   -webkit-app-region: no-drag;
   position: absolute;
-  right: 22px;
+  right: 36px;
   width: 14px;
   height: 14px;
   padding: 2px;
@@ -53,12 +67,25 @@ h1{
   font-size: 12px;
 }
 
-#debug ul{
+#debug #mouseTitle{
+  margin-left:200px;
+}
+
+#debug ul#fps{
   list-style: none;
   margin:0;
   padding:0;
   position: absolute;
   left: 30px;
+  top: 0px;
+}
+
+#debug ul#mouse{
+  list-style: none;
+  margin:0;
+  padding:0;
+  position: absolute;
+  left: 280px;
   top: 0px;
 }
 

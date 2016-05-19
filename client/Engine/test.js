@@ -21,7 +21,14 @@ module.exports = function(){
        material = new THREE.MeshBasicMaterial( { color: 0x2194ce, wireframe: true } );
 
     _mesh = new THREE.Mesh( geometry, material );
+    _mesh.castShadow = true;
+    _mesh.recieveShadow = true;
     _scene.add( _mesh );
+
+    var light = new THREE.PointLight(0xffffff);
+    light.position.set(-50,50,50);
+    _scene.add(light);
+    return Test;
   }
 
   Test.width = function(w){

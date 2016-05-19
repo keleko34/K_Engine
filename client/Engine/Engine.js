@@ -3,7 +3,7 @@ var localPath = process.cwd().replace(/\\/g,"/")+"/client/Engine",
     CreateTest = require(localPath+"/test");
 
 module.exports = function(){
-  var _threeRenderer = new THREE.WebGLRenderer(),
+  var _threeRenderer = new THREE.WebGLRenderer({antialias:true}),
       _renderBuffer = _threeRenderer.domElement,
       _bufferContext = _renderBuffer.getContext('webgl'),
       _fps = CreateFPS(),
@@ -18,7 +18,7 @@ module.exports = function(){
     _bufferContext.depthFunc(_bufferContext.LEQUAL);
     _bufferContext.clear(_bufferContext.COLOR_BUFFER_BIT|_bufferContext.DEPTH_BUFFER_BIT);
 
-    _test.width(_resolution.w).height(_resolution.h).create();
+    _test.width(_resolution.w).height(_resolution.h).create().camera().updateProjectionMatrix();
   }
 
   Engine.threeRenderer = function(){

@@ -2,7 +2,8 @@ module.exports = function(){
   var _Window = WindowElements.gui.Window.get(),
       _onResize = [],
       _onClose = [],
-      _onMinimize = [];
+      _onMinimize = [],
+      _toggleMax = false;
 
   function WindowControls()
   {
@@ -15,9 +16,15 @@ module.exports = function(){
       _Window.minimize();
     }
 
+    WindowElements.maximize.onclick = function(){
+      WindowControls.toggleMaximize();
+    }
+
     _Window.removeAllListeners('close');
     _Window.removeAllListeners('minimize');
     _Window.removeAllListeners('resize');
+    _Window.removeAllListeners('maximize');
+    _Window.removeAllListeners('unmaximize');
 
     for(x=0;x<_onClose.length;x++){
       _Window.on('close',_onClose[x]);
@@ -30,10 +37,30 @@ module.exports = function(){
     for(x=0;x<_onResize.length;x++){
       _Window.on('resize',_onResize[x]);
     }
+
+    _Window.on('maximize',function(){
+      _toggleMax = true;
+    })
+
+    _Window.on('unmaximize',function(){
+      _toggleMax = false;
+    })
   }
 
   WindowControls.Window = function(){
     return _Window;
+  }
+
+  WindowControls.toggleMaximize = function(){
+    if(!_toggleMax){
+        _toggleMax = !_toggleMax;
+        _Window.maximize();
+      }
+      else{
+        _toggleMax = !_toggleMax;
+        _Window.unmaximize();
+      }
+    return WindowControls;
   }
 
   WindowControls.addControlListener = function(type,func){
