@@ -1,5 +1,6 @@
 body{
   margin:0;
+  overflow:hidden;
 }
 h1{
   margin:0;
@@ -21,10 +22,24 @@ h1{
   -webkit-app-region: no-drag;
   position: absolute;
   right: 2px;
-  width:16px;
-  height:16px;
-  top:2px;
+  width: 14px;
+  height: 14px;
+  padding: 2px;
+  top: 2px;
   text-align: center;
-  font-size: 12px;
-  padding:0;
+  font-size: 8px;
+  line-height: 8px;
+}
+
+#minimize {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  right: 22px;
+  width: 14px;
+  height: 14px;
+  padding: 2px;
+  top: 2px;
+  text-align: center;
+  font-size: 8px;
+  line-height: 0px;
 }

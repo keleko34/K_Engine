@@ -5,8 +5,39 @@
     <link rel="stylesheet" href="assets/css/page.css" />
   </head>
   <body>
-    <div id="topBar"><h1>My Engine</h1><button id="close">X</button></div>
+    <div id="topBar"><h1>My Engine</h1><button id="minimize">_</button><button id="close">X</button></div>
     <canvas id="viewport"></canvas>
-    <script type="text/javascript" src="assets/js/init.js"></script>
+    <script type="text/javascript" src="../Engine/Engine.js"></script>
+    <script type="text/javascript" src="assets/js/window.js"></script>
+    <script type="text/javascript" src="assets/js/view.js"></script>
+    <script>
+      var WindowControls = CreateWindowControls(),
+        Engine = CreateEngine(),
+        ViewPort = CreateViewPort().renderBuffer(Engine.renderBuffer()),
+        isRunning = true,
+        timer = {};
+
+    WindowControls.addControlListener('resize',function(w,h){
+      ViewPort.width(w).height(h).call();
+    }).call();
+
+    function Main(){
+
+      if(isRunning){
+        console.log("Running");
+        Engine.draw();
+        ViewPort.render();
+        timer = requestAnimationFrame(Main);
+        return;
+      }
+      cancelAnimationFrame(timer);
+    }
+
+    ViewPort.width(WindowControls.Window().width)
+    .height(WindowControls.Window().height)
+    .call();
+    Engine.call();
+    timer = requestAnimationFrame(Main);
+    </script>
   </body>
 </html>

@@ -33,8 +33,7 @@
     "url": "https://github.com/keleko34/K_Engine/issues"
   },
   "dependencies": {
-    "nw": "^0.14.5-sdk",
-    "studio": "^0.13.1"
+    "nw": "0.14.5-sdk"
   },
   "devDependencies": {},
   "scripts": {
