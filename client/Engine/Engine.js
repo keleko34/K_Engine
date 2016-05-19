@@ -5,9 +5,12 @@ module.exports = function(){
   var _renderBuffer = document.createElement('canvas'),
       _bufferContext = _renderBuffer.getContext('webgl'),
       _fps = CreateFPS(),
-      _debug = false;
+      _debug = false,
+      _resolution = {w:1920,h:1080};
 
   function Engine(){
+    _renderBuffer.setAttribute('width',_resolution.w);
+    _renderBuffer.setAttribute('height',_resolution.h);
     _bufferContext.clearColor(0.0, 0.0, 0.0, 1.0);
     _bufferContext.enable(_bufferContext.DEPTH_TEST);
     _bufferContext.depthFunc(_bufferContext.LEQUAL);
@@ -20,6 +23,15 @@ module.exports = function(){
 
   Engine.fps = function(){
     return _fps;
+  }
+
+  Engine.resolution = function(w,h){
+    if(w === undefined){
+      return _resolution;
+    }
+    _resolution.w = (typeof w === 'number' ? w : _resolution.w);
+    _resolution.h = (typeof h === 'number' ? h : _resolution.h);
+    return Engine;
   }
 
   Engine.debug = function(d){
