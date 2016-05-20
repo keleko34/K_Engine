@@ -4,51 +4,64 @@ var base = process.cwd().replace(/\\/g,"/")+"/client/Engine/Input",
 
 module.exports = function(){
   var _environments = {
-    default:{
+        default:{
 
-    }
-  },
-  _mouse = CreateMouse(),
-  _keyboard = CreateKeyBoard(),
-  _environment = 'default',
-  _onBindingUpdateEvents = {"*":[]},
-  _itb = 0,
-  _nameb = "*",
-  _bindingUpdateEvent = function(e){
-    /* e = name(String), added(object info), removed(String), environment(String) */
+        }
+      },
+      _mouse = CreateMouse(),
+      _keyboard = CreateKeyBoard(),
+      _environment = 'default',
+      _onBindingUpdateEvents = {"*":[]},
+      _itb = 0,
+      _nameb = "*",
+      _bindingUpdateEvent = function(e){
+        /* e = name(String), added(object info), removed(String), environment(String) */
 
-    /* Global listener */
-    _nameb = "*";
-    for(_itb=0;_itb<_onBindingUpdateEvents[_nameb].length;_itb++){
-      if(typeof _onBindingUpdateEvents[_nameb][x] === 'function'){
-        _onBindingUpdateEvents[_nameb][x](e);
-      }
-    }
+        /* Global listener */
+        _nameb = "*";
+        for(_itb=0;_itb<_onBindingUpdateEvents[_nameb].length;_itb++){
+          if(typeof _onBindingUpdateEvents[_nameb][x] === 'function'){
+            _onBindingUpdateEvents[_nameb][x](e);
+          }
+        }
 
-    /* added name listener */
-    _nameb = e.name;
-    if(_onBindingUpdateEvents[_nameb] !== undefined){
-      for(_itb=0;_itb<_onBindingUpdateEvents[_nameb].length;_itb++){
-        if(typeof _onBindingUpdateEvents[_nameb][x] === 'function'){
-          _onBindingUpdateEvents[_nameb][x](e);
+        /* added name listener */
+        _nameb = e.name;
+        if(_onBindingUpdateEvents[_nameb] !== undefined){
+          for(_itb=0;_itb<_onBindingUpdateEvents[_nameb].length;_itb++){
+            if(typeof _onBindingUpdateEvents[_nameb][x] === 'function'){
+              _onBindingUpdateEvents[_nameb][x](e);
+            }
+          }
+        }
+
+        /* removed name listener */
+        _nameb = e.removed;
+        if(_onBindingUpdateEvents[_nameb] !== undefined){
+          for(_itb=0;_itb<_onBindingUpdateEvents[_nameb].length;_itb++){
+            if(typeof _onBindingUpdateEvents[_nameb][x] === 'function'){
+              _onBindingUpdateEvents[_nameb][x](e);
+            }
+          }
+        }
+
+      },
+      _itI = 0,
+      _keyList = [],
+      _inputEvent = function(e){
+        /* e = type(String), code(Int), key(String), shift(Bool), ctrl(Bool), alt(Bool), moveX(Int), moveY(Int) */
+        _keyList = _environments[_environment][e.key];
+        if(_keyList){
+          loop:for(_itI=0;_itI<_keyList.length;_itI++){
+            if(_keyList[_itI].type === type && _keyList[_itI].shift === e.shift && _keyList[_itI].ctrl === e.ctrl && _keyList[_itI].alt === e.alt){
+              e.name = _keyList[_itI].name;
+              e.readable = _keyList[_itI].readable;
+              _keyList[_itI].func(e);
+              break loop;
+            }
+          }
         }
       }
-    }
-
-    /* removed name listener */
-    _nameb = e.removed;
-    if(_onBindingUpdateEvents[_nameb] !== undefined){
-      for(_itb=0;_itb<_onBindingUpdateEvents[_nameb].length;_itb++){
-        if(typeof _onBindingUpdateEvents[_nameb][x] === 'function'){
-          _onBindingUpdateEvents[_nameb][x](e);
-        }
-      }
-    }
-
-  },
-  _inputEvent = function(e){
-    /* e = type(String), code(Int), key(String), shift(Bool), ctrl(Bool), alt(Bool), moveX(Int), moveY(Int) */
-  }
 
   function Inputs(){
     Inputs.toggleListening('mouse',true);
@@ -148,36 +161,56 @@ module.exports = function(){
         __bindings = {},
         __bindingKeys = [],
         __bindingKey = {},
-        __removal = "";
+        __removal = "",
+        __added = {},
+        __found = false;
 
-    __readable = (__shift ? "Shift ": "")+(__ctrl ? "Ctrl " : "")+(__alt ? "Alt " : "")+__type;
+    __readable = (__shift ? "Shift ": "")+(__ctrl ? "Ctrl " : "")+(__alt ? "Alt " : "")+__key;
     if(_environments[__environment]){
       __bindings = _environments[__environment];
 
       /* Overwrite Existing if There */
-      __bindingKeys = Object.keys(__bindings);
+      __bindingKeys = __bindings[__key];
       loop:for(var x=0;x<__bindingKeys.length;x++){
-        __bindingKey = __bindings[__bindingKeys[x]];
-
-        if(__bindingKey.key === __key && __bindingKey.type === __type && __bindingKey.shift === !!__shift && __bindingKey.ctrl === !!__ctrl && __bindingKey.alt === !!__alt){
-          __bindings[__bindingKeys[x]] = null;
-          __removal = __bindingKeys[x];
+        __bindingKey = __bindingKeys[x];
+        if(__bindingKey.type === __type && __bindingKey.shift === !!__shift && __bindingKey.ctrl === !!__ctrl && __bindingKey.alt === !!__alt){
+          __removal = __bindingKey.name;
+          __bindingKey.name = __name;
+          __bindingKey.func = __func;
+          __added = __bindingKey;
+          __found = true;
           break loop;
         }
       }
-      __bindings[__name] = {readable:__readable,key:__key,type:__type,func:__func,shift:!!__shift,ctrl:!!__ctrl,alt:!!__alt};
-      _bindingUpdateEvent({name:__name,added:__bindings[__name],removed:__removal,environment:__environment});
+      if(!__found){
+        __bindingKeys.push({readable:__readable,name:__name,type:__type,func:__func,shift:!!__shift,ctrl:!!__ctrl,alt:!!__alt});
+        __added = __bindingKeys[(__bindingKeys.length-1)];
+      }
+      _bindingUpdateEvent({key:__key,name:__name,added:__added,removed:__removal,environment:__environment});
     }
     return Inputs;
   }
 
   Inputs.removeBinding = function(environment,name){
     var __environment = (name === undefined ? 'default' : environment),
-        __name = (name === undefined ? environment : name);
+        __name = (name === undefined ? environment : name),
+        __keys = [],
+        __key = {},
+        __k = "";
 
     if(_environments[__environment]){
-      _environments[__environment][__name] = null;
-      _bindingUpdateEvent({added:undefined,removed:__name,environment:__environment});
+      __keys = Object.keys(_environments[__environment]);
+      loop:for(var x=0;x<__keys.length;x++){
+        __k = __keys[x];
+        __key = _environments[__environment][__keys[x]];
+        for(var i=0;i<__key.length;i++){
+          if(__key[i].name === __name){
+            __key.splice(i,1);
+            break loop;
+          }
+        }
+      }
+      _bindingUpdateEvent({added:undefined,key:__k,name:__name,removed:__name,environment:__environment});
     }
     return Inputs;
   }
