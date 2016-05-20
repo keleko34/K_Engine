@@ -12,6 +12,8 @@ module.exports = function(){
       _onKeyEvents = [],
       _it = 0,
       _keyEvent = function(e){
+        e.preventDefault();
+        e.stopPropagation();
         _code = e.keyCode;
         _key = _keycodes.codes()[_code];
         _shift = !!e.shiftKey;
@@ -35,18 +37,17 @@ module.exports = function(){
   }
 
   KeyBoard.toggleEventListener = function(toggle){
-    if(typeof toggle !== 'boolean'){
-      WindowElements.viewport.onkeydown = (_toggled ? null : _keyEvent);
-      WindowElements.viewport.onkeyup = (_toggled ? null : _keyEvent);
-      WindowElements.viewport.onkeypress = (_toggled ? null : _keyEvent);
-      _toggled = !_toggled;
+    if(typeof toggle === 'boolean'){
+      _toggled = !toggle;
     }
-    else{
-      WindowElements.viewport.onkeydown = (!toggle ? null : _keyEvent);
-      WindowElements.viewport.onkeyup = (!toggle ? null : _keyEvent);
-      WindowElements.viewport.onkeypress = (!toggle ? null : _keyEvent);
-      _toggled = toggle;
+    WindowElements.document.removeEventListener('keydown',_keyEvent);
+    WindowElements.document.removeEventListener('keyup',_keyEvent);
+
+    if(!_toggled){
+      WindowElements.document.addEventListener('keydown',_keyEvent);
+      WindowElements.document.addEventListener('keyup',_keyEvent);
     }
+    _toggled = !_toggled;
   }
 
   KeyBoard.addKeyListener = function(func){

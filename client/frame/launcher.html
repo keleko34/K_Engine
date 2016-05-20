@@ -27,6 +27,7 @@
     <script>
       global.THREE = THREE;
       global.WindowElements = {
+        document : document,
         topbar : document.getElementById('topbar'),
         maximize : document.getElementById('maximize'),
         minimize : document.getElementById('minimize'),
@@ -52,7 +53,7 @@
       var WindowControls = require('./assets/js/window').call(),
         Engine = require('./../Engine/Engine').call(),
         ViewPort = require('./assets/js/view').call().renderBuffer(Engine.renderBuffer()),
-        Input = require('./../Engine/Input').call().addCommand('f3',function(){
+        Input = require('./../Engine/Input/Input').call().addBinding('debug','keyup','f3',function(){
           if(!debugToggled){
             debugToggled = true;
             Engine.debug(true);
@@ -65,31 +66,23 @@
           }
 
         },true)
-        .addCommand('escape',function(){
+        .addBinding('blur','keyup','esc',function(){
           document.exitPointerLock();
+          Input.toggleRenderHeavyEvents(false);
         })
-        .addCommand('f11',function(){
+        .addBinding('fullscreen','keyup','f11',function(){
           WindowControls.toggleMaximize();
+        })
+        .addBinding('mousedebug','mousemove','left',function(e){
+          global.WindowElements.mouse.x.innerHTML = e.moveX;
+          global.WindowElements.mouse.y.innerHTML = e.moveY;
+        })
+        .addBinding('pointerlock','dblclick','left',function(){
+          global.WindowElements.viewport.requestPointerLock();
+          Input.toggleRenderHeavyEvents(true);
         }),
         isRunning = true,
-        timer = {},
-        _onMouseMove = function(e){
-          global.WindowElements.mouse.x.innerHTML = e.movementX;
-          global.WindowElements.mouse.y.innerHTML = e.movementY;
-        };
-
-    global.WindowElements.viewport.ondblclick = function(){
-      global.WindowElements.viewport.requestPointerLock();
-    }
-
-    document.addEventListener('pointerlockchange',function(e){
-      if(document.pointerLockElement){
-        document.onmousemove = _onMouseMove;
-      }
-      else{
-        document.onmousemove = null;
-      }
-    });
+        timer = {};
 
     //global.WindowElements.viewport.onmousemove = _onMouseMove
 
@@ -101,7 +94,6 @@
     window.onkeyup = function(e){
       e.preventDefault();
       e.stopPropagation();
-      Input.code(e.keyCode).shift(e.shiftKey).alt(e.altKey).ctrl(e.ctrlKey).call();
     }
 
     function Main(){
@@ -121,6 +113,7 @@
     .height(WindowControls.Window().height)
     .call();
     Engine.call();
+    Input.call();
     timer = requestAnimationFrame(Main);
     </script>
   </body>

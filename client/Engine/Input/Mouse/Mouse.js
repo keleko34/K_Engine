@@ -26,6 +26,8 @@ module.exports = function(){
         }
       },
       _MouseEvent = function(e){
+        e.preventDefault();
+        e.stopPropagation();
         if(e.type === 'mousedown' && !_holding){
           /* Single Mouse Down Event Without holding */
            _loopEvents(e);
@@ -33,7 +35,7 @@ module.exports = function(){
           e._holding = true;
           _holdTimer = setTimeout(function(){_MouseEvent(e);},1);
         }
-        else if(_holding && (e.type === 'mouseup' || e.type === 'click')){
+        else if(_holding && (e.type === 'mouseup' || e.type === 'click' || e.type === 'dblclick')){
           _holding = false;
         }
 
@@ -41,7 +43,7 @@ module.exports = function(){
           /* Standard Mouse Event */
           _loopEvents(e);
         }
-        else if(_holding && e._holding){
+        else if(_holding && e._holding && e.type === 'mousedown'){
           /* Our Holding Events as we ignore all mousedown events during Holding */
           if(_holdTimer){
             clearTimeout(_holdTimer);
@@ -51,11 +53,27 @@ module.exports = function(){
             _holdTimer = setTimeout(function(){_MouseEvent(e);},1);
           }
         }
-
+        else if(_holding && !e._holding && e.type === 'mousemove'){
+          _loopEvents(e);
+        }
       }
 
   function Mouse(){
     Mouse.toggleEventListener(true);
+  }
+
+  Mouse.toggleMouseMove = function(toggle){
+    WindowElements.viewport.removeEventListener('mousemove',_MouseEvent);
+    if(toggle){
+      WindowElements.viewport.addEventListener('mousemove',_MouseEvent);
+    }
+  }
+
+  Mouse.toggleMouseDown = function(toggle){
+    WindowElements.viewport.removeEventListener('mousedown',_MouseEvent);
+    if(toggle){
+      WindowElements.viewport.addEventListener('mousedown',_MouseEvent);
+    }
   }
 
   Mouse.toggleEventListener = function(toggle){

@@ -53,7 +53,7 @@ module.exports = function(){
         _keyList = _environments[_environment][e.key];
         if(_keyList){
           loop:for(_itI=0;_itI<_keyList.length;_itI++){
-            if(_keyList[_itI].type === type && _keyList[_itI].shift === e.shift && _keyList[_itI].ctrl === e.ctrl && _keyList[_itI].alt === e.alt){
+            if(_keyList[_itI].type === e.type && _keyList[_itI].shift === e.shift && _keyList[_itI].ctrl === e.ctrl && _keyList[_itI].alt === e.alt){
               e.name = _keyList[_itI].name;
               e.readable = _keyList[_itI].readable;
               _keyList[_itI].func(e);
@@ -94,6 +94,11 @@ module.exports = function(){
       }
     }
     return Inputs
+  }
+
+  Inputs.toggleRenderHeavyEvents = function(toggle){
+    _mouse.toggleMouseMove(toggle);
+    _mouse.toggleMouseDown(toggle);
   }
 
   Inputs.toggleListening = function(type,toggle){
@@ -171,6 +176,10 @@ module.exports = function(){
 
       /* Overwrite Existing if There */
       __bindingKeys = __bindings[__key];
+      if(!__bindingKeys){
+        __bindings[__key] = [];
+        __bindingKeys = __bindings[__key];
+      }
       loop:for(var x=0;x<__bindingKeys.length;x++){
         __bindingKey = __bindingKeys[x];
         if(__bindingKey.type === __type && __bindingKey.shift === !!__shift && __bindingKey.ctrl === !!__ctrl && __bindingKey.alt === !!__alt){
