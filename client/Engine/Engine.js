@@ -60,7 +60,7 @@ module.exports = function(){
     Engine.debug();
     _test.call();
 
-    //_threeRenderer.render(_test.scene(),_test.camera());
+    _threeRenderer.render(_test.scene(),_test.camera());
   }
 
   return Engine;
