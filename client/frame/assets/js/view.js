@@ -11,6 +11,7 @@ module.exports = function(){
     _View.setAttribute('height',_height);
     _View.setAttribute('width',_width);
     View.render();
+    console.log(process.pid);
   }
 
   View.render = function(){
