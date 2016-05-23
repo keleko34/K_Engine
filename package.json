@@ -1,6 +1,6 @@
 {
   "name": "K_Engine",
-  "main": "client/frame/launcher.html",
+  "main": "init.html",
   "window": {
     "frame": false,
     "toolbar": false
