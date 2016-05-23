@@ -34,12 +34,6 @@ var _Window = WindowElements.gui.Window.get(),
     .Window(_Window)
     .call();
 
-    WindowElements.document.ondblclick = function(e){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      _ViewPort.togglePointerLock(true);
-    }
-
     _ViewPort.width(_Window.width)
     .height(_Window.height)
     .togglePointerLock(true)

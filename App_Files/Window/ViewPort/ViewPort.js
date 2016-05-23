@@ -6,8 +6,8 @@ module.exports = function(){
       _height = parseInt(_ViewPort.getAttribute('height'),10),
       _onPointerLock = [],
       _pointerLockEvent = function(){
-        if(WindowElement.document.pointerLockElement !== undefined){
-          if(WindowElement.document.pointerLockElement.nodeName === 'CANVAS'){
+        if(WindowElements.document.pointerLockElement){
+          if(WindowElements.document.pointerLockElement.nodeName === 'CANVAS'){
             _pointerlock = true;
           }
         }
@@ -15,13 +15,13 @@ module.exports = function(){
           _pointerlock = false;
         }
         for(var x=0;x<_onPointerLock.length;x++){
-          _onPointerLock[x](_onPointerLock);
+          _onPointerLock[x](_pointerlock);
         }
       }
 
   function ViewPort(){
-    WindowElements.document.removeEventListener('pointerlock',_pointerLockEvent);
-    WindowElements.document.addEventListener('pointerlock',_pointerLockEvent);
+    WindowElements.document.removeEventListener('pointerlockchange',_pointerLockEvent);
+    WindowElements.document.addEventListener('pointerlockchange',_pointerLockEvent);
 
     _ViewPort.setAttribute('height',_height);
     _ViewPort.setAttribute('width',_width);

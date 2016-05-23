@@ -1,18 +1,25 @@
 var localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine",
-    CreateFPS = require(localPath+"/FPS"),
+    CreateDebug = require(localPath+"/Debug/Debug"),
+    CreateInput = require(localPath+"/Input/Input"),
     CreateTest = require(localPath+"/test");
 
 module.exports = function(){
   var _threeRenderer = new THREE.WebGLRenderer({antialias:true}),
       _renderBuffer = _threeRenderer.domElement,
       _bufferContext = _renderBuffer.getContext('webgl'),
-      _View = {},
-      _ViewContext = {},
+      _Input = CreateInput(),
+      _View = Win.ViewPort().view(),
+      _ViewContext = Win.ViewPort().context(),
       _isRunning = true,
-      _fps = CreateFPS(),
-      _debug = false,
+      _debug = CreateDebug(),
       _resolution = {w:1920,h:1080},
-      _test = CreateTest();
+      _test = CreateTest(),
+      _debugMode = function(e){
+          _debug.toggleDebugging();
+        },
+      _togglePointer = function(){
+        Win.ViewPort().togglePointerLock(true);
+      }
 
   function Engine(){
     _threeRenderer.setSize(_resolution.w,_resolution.h);
@@ -22,6 +29,18 @@ module.exports = function(){
     _bufferContext.clear(_bufferContext.COLOR_BUFFER_BIT|_bufferContext.DEPTH_BUFFER_BIT);
 
     _test.width(_resolution.w).height(_resolution.h).create().camera().updateProjectionMatrix();
+
+    _Input.removeBinding("Debug")
+    .addBinding("Debug","keyup","f3",_debugMode,true)
+    .removeBinding("Mouse Debug")
+    .addBinding("Mouse Debug","mousemove","left",_debug.mouse)
+    .removeBinding("Toggle PointerLock")
+    .addBinding("Toggle PointerLock","dblclick","left",_togglePointer).call();
+
+  }
+
+  Engine.Input = function(){
+    return _Input;
   }
 
   Engine.isRunning = function(v){
@@ -54,15 +73,11 @@ module.exports = function(){
   }
 
   Engine.debug = function(d){
-    if(d === undefined && _debug){
-      _fps.call();
-      WindowElements.fps.min.innerHTML = _fps.min();
-      WindowElements.fps.max.innerHTML = _fps.max();
-      WindowElements.fps.avg.innerHTML = _fps.avg();
-      WindowElements.fps.current.innerHTML = _fps.current();
+    if(d === undefined && _debug.debugging()){
+      _debug.fps();
     }
     else{
-      _debug = !!d;
+      _debug.debugging(d);
     }
     return Engine;
   }

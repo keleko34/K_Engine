@@ -35,35 +35,37 @@
           close : document.getElementById('close')
         },
         viewport : document.getElementById('viewport'),
-        debug : document.getElementById('debug'),
-        fps : {
-          min : document.getElementById('fpsmin'),
-          max : document.getElementById('fpsmax'),
-          avg : document.getElementById('fpsavg'),
-          current : document.getElementById('fpscurrent'),
-        },
-        mouse : {
-          x : document.getElementById('mouseX'),
-          y : document.getElementById('mouseY')
+        debug : {
+          container : document.getElementById('debug'),
+          fps : {
+            min : document.getElementById('fpsmin'),
+            max : document.getElementById('fpsmax'),
+            avg : document.getElementById('fpsavg'),
+            current : document.getElementById('fpscurrent'),
+          },
+          mouse : {
+            x : document.getElementById('mouseX'),
+            y : document.getElementById('mouseY')
+          }
         },
         gui : require('nw.gui')
       };
 
-      var Win = require('./App_Files/Window/Window').call(),
-      Engine = require('./App_Files/Engine/Engine').call().View(Win.ViewPort().view());
+      global.Win = require('./App_Files/Window/Window').call();
+      global.Engine = require('./App_Files/Engine/Engine').call();
 
-      Win.ViewPort().addPointerLockListener(function(){
-
+      global.Win.ViewPort().addPointerLockListener(function(isLocked){
+          global.Engine.Input().toggleRenderHeavyEvents(isLocked);
       });
 
-      Win.call();
-      Engine.call();
+      global.Win.call();
+      global.Engine.call();
 
     function Main(){
 
-      if(Engine.isRunning()){
+      if(global.Engine.isRunning()){
         console.log("Running");
-        Engine.draw().debug().render();
+        global.Engine.draw().debug().render();
         timer = requestAnimationFrame(Main);
       }
       else{
