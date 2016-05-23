@@ -1,4 +1,4 @@
-var localPath = process.cwd().replace(/\\/g,"/")+"/Engine",
+var localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine",
     CreateFPS = require(localPath+"/FPS"),
     CreateTest = require(localPath+"/test");
 
@@ -68,7 +68,7 @@ module.exports = function(){
   }
 
   Engine.draw = function(){
-    //_test.call();
+    _test.call();
 
     //_threeRenderer.render(_test.scene(),_test.camera());
 

@@ -1,4 +1,4 @@
-var path = process.cwd().replace(/\\/,"/")+"/Window",
+var path = process.cwd().replace(/\\/,"/")+"/App_Files/Window",
     CreateControls = require(path+"/Controls/Controls"),
     CreateViewPort = require(path+"/ViewPort/ViewPort");
 

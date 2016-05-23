@@ -1,4 +1,4 @@
-var base = process.cwd().replace(/\\/g,"/")+"/Engine/Input/Keyboard",
+var base = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine/Input/Keyboard",
     CreateKeyCodes = require(base+"/KeyCodes");
 
 module.exports = function(){

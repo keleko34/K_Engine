@@ -21,7 +21,7 @@
       </ul>
     </div>
     <canvas id="viewport"></canvas>
-    <script src="assets/js/three.min.js"></script>
+    <script src="App_Files/Assets/js/three.min.js"></script>
     <script>
       /* Globals */
       global.THREE = THREE;
@@ -49,8 +49,8 @@
         gui : require('nw.gui')
       };
 
-      var Win = require('./Window/Window').call(),
-      Engine = require('./Engine/Engine').call().View(Win.ViewPort().view());
+      var Win = require('./App_Files/Window/Window').call(),
+      Engine = require('./App_Files/Engine/Engine').call().View(Win.ViewPort().view());
 
       Win.ViewPort().addPointerLockListener(function(){
 

@@ -1,4 +1,4 @@
-var base = process.cwd().replace(/\\/g,"/")+"/Engine/Input",
+var base = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine/Input",
     CreateKeyBoard = require(base+"/Keyboard/Keyboard"),
     CreateMouse = require(base+"/Mouse/Mouse");
 
