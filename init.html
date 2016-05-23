@@ -49,15 +49,21 @@
         gui : require('nw.gui')
       };
 
-      var isRunning = true,
-      CreateWindow = require('./client/Window/Window');
+      var Win = require('./Window/Window').call(),
+      Engine = require('./Engine/Engine').call().View(Win.ViewPort().view());
 
-    CreateWindow().call();
+      Win.ViewPort().addPointerLockListener(function(){
+
+      });
+
+      Win.call();
+      Engine.call();
+
     function Main(){
 
-      if(isRunning){
+      if(Engine.isRunning()){
         console.log("Running");
-
+        Engine.draw().debug().render();
         timer = requestAnimationFrame(Main);
       }
       else{

@@ -1,4 +1,4 @@
-var path = process.cwd().replace(/\\/,"/")+"/client/Window",
+var path = process.cwd().replace(/\\/,"/")+"/Window",
     CreateControls = require(path+"/Controls/Controls"),
     CreateViewPort = require(path+"/ViewPort/ViewPort");
 
@@ -50,7 +50,7 @@ var _Window = WindowElements.gui.Window.get(),
     return _Controls;
   }
 
-  Window.View = function(){
+  Window.ViewPort = function(){
     return _ViewPort;
   }
 
