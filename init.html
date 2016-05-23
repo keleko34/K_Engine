@@ -9,21 +9,21 @@
     <div id="debug" class="hide">
       <span class="debugTitle">FPS</span>
       <ul id="fps">
-        <li>Min: <span id="fpsmin"></span></li>
-        <li>Max: <span id="fpsmax"></span></li>
-        <li>Avg: <span id="fpsavg"></span></li>
-        <li>Current: <span id="fpscurrent"></span></li>
+        <li>Min: <span id="fpsmin">0</span></li>
+        <li>Max: <span id="fpsmax">0</span></li>
+        <li>Avg: <span id="fpsavg">0</span></li>
+        <li>Current: <span id="fpscurrent">0</span></li>
       </ul>
       <span class="debugTitle" id="mouseTitle">MOUSE</span>
       <ul id="mouse">
-        <li>x: <span id="mouseX"></span></li>
-        <li>y: <span id="mouseY"></span></li>
+        <li>x: <span id="mouseX">0</span></li>
+        <li>y: <span id="mouseY">0</span></li>
       </ul>
     </div>
     <canvas id="viewport"></canvas>
     <script src="App_Files/Assets/js/three.min.js"></script>
     <script>
-      /* Globals */
+      /* REGION Globals */
       global.THREE = THREE;
       global.WindowElements = {
         document : document,
@@ -50,22 +50,19 @@
         },
         gui : require('nw.gui')
       };
+      window.Win = global.Win = require('./App_Files/Window/Window').call();
+      window.Engine = global.Engine = require('./App_Files/Engine/Engine').call();
 
-      global.Win = require('./App_Files/Window/Window').call();
-      global.Engine = require('./App_Files/Engine/Engine').call();
+      /* ENDREGION Globals */
 
-      global.Win.ViewPort().addPointerLockListener(function(isLocked){
-          global.Engine.Input().toggleRenderHeavyEvents(isLocked);
-      });
-
-      global.Win.call();
-      global.Engine.call();
+      Win.call();
+      Engine.call();
 
     function Main(){
 
-      if(global.Engine.isRunning()){
+      if(Engine.isRunning()){
         console.log("Running");
-        global.Engine.draw().debug().render();
+        Engine.draw().debug().render();
         timer = requestAnimationFrame(Main);
       }
       else{

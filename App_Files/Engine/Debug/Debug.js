@@ -6,7 +6,10 @@ module.exports = function(){
       _debugging = false;
 
   function Debug(){
-
+    Engine.Input.removeBinding("Debug")
+    .addBinding("Debug","keyup","f3",Debug.toggleDebugging,true)
+    .removeBinding("Mouse Debug")
+    .addBinding("Mouse Debug","mousemove","left",Debug.mouse);
   }
 
   Debug.fps = function(){

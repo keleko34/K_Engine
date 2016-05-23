@@ -11,12 +11,9 @@ module.exports = function(){
       _View = Win.ViewPort().view(),
       _ViewContext = Win.ViewPort().context(),
       _isRunning = true,
-      _debug = CreateDebug(),
+      _Debug = CreateDebug(),
       _resolution = {w:1920,h:1080},
       _test = CreateTest(),
-      _debugMode = function(e){
-          _debug.toggleDebugging();
-        },
       _togglePointer = function(){
         Win.ViewPort().togglePointerLock(true);
       }
@@ -28,20 +25,16 @@ module.exports = function(){
     _bufferContext.depthFunc(_bufferContext.LEQUAL);
     _bufferContext.clear(_bufferContext.COLOR_BUFFER_BIT|_bufferContext.DEPTH_BUFFER_BIT);
 
+    /* REGION Test Code */
     _test.width(_resolution.w).height(_resolution.h).create().camera().updateProjectionMatrix();
+    /* ENDREGION Test Code */
 
-    _Input.removeBinding("Debug")
-    .addBinding("Debug","keyup","f3",_debugMode,true)
-    .removeBinding("Mouse Debug")
-    .addBinding("Mouse Debug","mousemove","left",_debug.mouse)
-    .removeBinding("Toggle PointerLock")
-    .addBinding("Toggle PointerLock","dblclick","left",_togglePointer).call();
-
+    _Input.call();
+    _Debug.call();
   }
 
-  Engine.Input = function(){
-    return _Input;
-  }
+  Engine.Input = _Input;
+  Engine.Debugger = _Debug;
 
   Engine.isRunning = function(v){
     if(v === undefined){
@@ -73,11 +66,11 @@ module.exports = function(){
   }
 
   Engine.debug = function(d){
-    if(d === undefined && _debug.debugging()){
-      _debug.fps();
+    if(d === undefined && _Debug.debugging()){
+      _Debug.fps();
     }
     else{
-      _debug.debugging(d);
+      _Debug.debugging(d);
     }
     return Engine;
   }

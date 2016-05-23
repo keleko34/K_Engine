@@ -14,9 +14,13 @@ module.exports = function(){
         else{
           _pointerlock = false;
         }
+        Engine.Input.toggleRenderHeavyEvents(_pointerlock);
         for(var x=0;x<_onPointerLock.length;x++){
           _onPointerLock[x](_pointerlock);
         }
+      },
+      _pointerLockOn = function(){
+        ViewPort.togglePointerLock(true);
       }
 
   function ViewPort(){
@@ -26,6 +30,8 @@ module.exports = function(){
     _ViewPort.setAttribute('height',_height);
     _ViewPort.setAttribute('width',_width);
 
+    Engine.Input.removeBinding("Toggle PointerLock")
+    .addBinding("Toggle PointerLock","dblclick","left",_pointerLockOn);
   }
 
   ViewPort.view = function(){
