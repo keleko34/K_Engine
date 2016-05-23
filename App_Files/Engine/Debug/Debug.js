@@ -12,6 +12,7 @@ module.exports = function(){
     .addBinding("Mouse Debug","mousemove","left",Debug.mouse);
   }
 
+
   Debug.fps = function(){
     if(_debugging){
       _fps.call();

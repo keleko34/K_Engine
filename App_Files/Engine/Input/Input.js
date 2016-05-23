@@ -63,6 +63,7 @@ module.exports = function(){
         }
       }
 
+
   function Inputs(){
     Inputs.toggleListening('mouse',true);
     Inputs.toggleListening('keyboard',true);

@@ -56,6 +56,7 @@ module.exports = function(){
     return _fps;
   }
 
+
   Engine.resolution = function(w,h){
     if(w === undefined){
       return _resolution;

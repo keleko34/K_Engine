@@ -19,5 +19,6 @@ module.exports = function(){
     return Camera;
   }
 
+
   return Camera;
 }

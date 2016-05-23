@@ -40,6 +40,7 @@ var _Window = WindowElements.gui.Window.get(),
     .call();
   }
 
+
   Window.Controls = function(){
     return _Controls;
   }

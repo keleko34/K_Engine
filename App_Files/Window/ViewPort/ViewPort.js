@@ -23,6 +23,7 @@ module.exports = function(){
         ViewPort.togglePointerLock(true);
       }
 
+
   function ViewPort(){
     WindowElements.document.removeEventListener('pointerlockchange',_pointerLockEvent);
     WindowElements.document.addEventListener('pointerlockchange',_pointerLockEvent);

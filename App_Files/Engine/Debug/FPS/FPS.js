@@ -7,7 +7,6 @@ module.exports = function(){
       _currentFPS = 0,
       _loopIt = 0
 
-
   function FPS(){
     var i = 0,
         now = Date.now();
