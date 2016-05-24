@@ -1,6 +1,7 @@
 var localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine",
     CreateDebug = require(localPath+"/Debug/Debug"),
     CreateInput = require(localPath+"/Input/Input"),
+    CreateCamera = require(localPath+"/Camera/Camera"),
     CreateTest = require(localPath+"/test");
 
 module.exports = function(){
@@ -12,6 +13,7 @@ module.exports = function(){
       _ViewContext = Win.ViewPort().context(),
       _isRunning = true,
       _Debug = CreateDebug(),
+      _Camera = CreateCamera(),
       _resolution = {w:1920,h:1080},
       _test = CreateTest(),
       _togglePointer = function(){
@@ -25,16 +27,19 @@ module.exports = function(){
     _bufferContext.depthFunc(_bufferContext.LEQUAL);
     _bufferContext.clear(_bufferContext.COLOR_BUFFER_BIT|_bufferContext.DEPTH_BUFFER_BIT);
 
-    /* REGION Test Code */
-    _test.width(_resolution.w).height(_resolution.h).create().camera().updateProjectionMatrix();
-    /* ENDREGION Test Code */
-
     _Input.call();
     _Debug.call();
+    _Camera.width(_resolution.w).height(_resolution.h).call();
+
+     /* REGION Test Code */
+    _test.width(_resolution.w).height(_resolution.h).create();
+    _test.scene().add(_Camera.perspectiveCamera())
+    /* ENDREGION Test Code */
   }
 
   Engine.Input = _Input;
   Engine.Debugger = _Debug;
+  Engine.Camera = _Camera;
 
   Engine.isRunning = function(v){
     if(v === undefined){
@@ -78,8 +83,7 @@ module.exports = function(){
 
   Engine.draw = function(){
     _test.call();
-
-    //_threeRenderer.render(_test.scene(),_test.camera());
+    _threeRenderer.render(_test.scene(),_Camera.perspectiveCamera());
 
     return Engine;
   }

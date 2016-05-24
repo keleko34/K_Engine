@@ -8,12 +8,12 @@ var _Window = WindowElements.gui.Window.get(),
     _Controls = CreateControls(),
     _ViewPort = CreateViewPort(),
     _keyCommands = function(e){
-      if(e.keyCode === 122 && e.shiftKey){
+      if(e.keyCode === 122){
         e.preventDefault();
         e.stopImmediatePropagation();
         _Controls.toggleMaximize();
       }
-      if(e.keyCode === 27 && e.shiftKey){
+      if(e.keyCode === 27){
         e.preventDefault();
         e.stopImmediatePropagation();
         _ViewPort.togglePointerLock(false);

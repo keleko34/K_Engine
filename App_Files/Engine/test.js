@@ -14,16 +14,28 @@ module.exports = function(){
 
     _scene = new THREE.Scene();
 
-    _camera = new THREE.PerspectiveCamera( 45, _width / _height, 1, 10000 );
-    _camera.position.z = 1000;
+
 
    var geometry = new THREE.BoxGeometry( 200, 200, 200 ),
        material = new THREE.MeshBasicMaterial( { color: 0x2194ce, wireframe: true } );
 
+    var _floor = new THREE.BoxGeometry(1000,50,3000),
+        _floorMaterial = new THREE.MeshBasicMaterial({color: 0xc5c4c4}),
+        _floorMesh = new THREE.Mesh(_floor,_floorMaterial);
+
+    _floorMesh.position.y -= 200;
+
     _mesh = new THREE.Mesh( geometry, material );
+
+    _floorMesh.castShadow = true;
     _mesh.castShadow = true;
+
+    _floorMesh.recieveShadow = true;
     _mesh.recieveShadow = true;
+
+    _scene.add(_floorMesh);
     _scene.add( _mesh );
+
 
     var light = new THREE.PointLight(0xffffff);
     light.position.set(-50,50,50);

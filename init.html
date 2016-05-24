@@ -19,6 +19,15 @@
         <li>x: <span id="mouseX">0</span></li>
         <li>y: <span id="mouseY">0</span></li>
       </ul>
+      <div id="environment">Default</div>
+    </div>
+    <div id="helper">
+      <ul>
+        <li>Esc - <span>Unlock</span></li>
+        <li>F3 - <span>Debug</span></li>
+        <li>F5 - <span>ModeSwitch</span></li>
+        <li>F11 - <span>Fullscreen</span></li>
+      </ul>
     </div>
     <canvas id="viewport"></canvas>
     <script src="App_Files/Assets/js/three.min.js"></script>
@@ -37,6 +46,7 @@
         viewport : document.getElementById('viewport'),
         debug : {
           container : document.getElementById('debug'),
+          environment : document.getElementById('environment'),
           fps : {
             min : document.getElementById('fpsmin'),
             max : document.getElementById('fpsmax'),

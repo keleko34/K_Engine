@@ -31,8 +31,7 @@ module.exports = function(){
     _ViewPort.setAttribute('height',_height);
     _ViewPort.setAttribute('width',_width);
 
-    Engine.Input.removeBinding("Toggle PointerLock")
-    .addBinding("Toggle PointerLock","dblclick","left",_pointerLockOn);
+    Engine.Input.replaceBinding("Toggle PointerLock","dblclick","left",_pointerLockOn);
   }
 
   ViewPort.view = function(){

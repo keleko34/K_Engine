@@ -12,6 +12,7 @@ module.exports = function(){
       _keyboard = CreateKeyBoard(),
       _environment = 'default',
       _onBindingUpdateEvents = {"*":[]},
+      _onEnvironmentChange = [],
       _itb = 0,
       _nameb = "*",
       _bindingUpdateEvent = function(e){
@@ -67,6 +68,45 @@ module.exports = function(){
   function Inputs(){
     Inputs.toggleListening('mouse',true);
     Inputs.toggleListening('keyboard',true);
+  }
+
+  Inputs.copyBinding = function(environment,name){
+    var __environment = (typeof name === 'string' ? environment : 'default'),
+        __name = (typeof name === 'string' ? name : environment),
+        __keys = [],
+        __key = {},
+        __k = "";
+
+    if(_environments[__environment] !== undefined){
+      __keys = Object.keys(_environments[__environment]);
+      loop:for(var x=0;x<__keys.length;x++){
+        __k = __keys[x];
+        __key = _environments[__environment][__k];
+        for(var i=0;i<__key.length;i++){
+          if(__key[i].name === __name){
+            Inputs.removeBinding(_environment,__key[i].name)
+            .addBinding(_environment,__key[i].name,__key[i].type,__k,__key[i].func,__key[i].shift,__key[i].ctrl,__key[i].alt);
+            break loop;
+          }
+        }
+      }
+    }
+    return Inputs;
+  }
+
+  Inputs.addEnvironmentListener = function(func){
+    _onEnvironmentChange.push(func);
+    return Inputs;
+  }
+
+  Inputs.removeEnvironmentListener = function(func){
+    loop:for(var x=0;x<_onEnvironmentChange.length;x++){
+      if(_onEnvironmentChange[x].toString() === func.toString()){
+        _onEnvironmentChange.splice(x,1);
+        break loop;
+      }
+    }
+    return Inputs;
   }
 
   Inputs.addBindingUpdateListener = function(name,func){
@@ -134,8 +174,17 @@ module.exports = function(){
     if(v === undefined){
       return _environment;
     }
-    _environment = (typeof v === 'string' && _environments[v] ? v : _environment);
+    if(typeof v === 'string' &&  _environments[v]){
+      for(var x=0;x<_onEnvironmentChange.length;x++){
+        _onEnvironmentChange[x]({old:_environment,new:v});
+      }
+      _environment = v;
+    }
     return Inputs;
+  }
+
+  Inputs.currentBindings = function(){
+    return _environments[_environment];
   }
 
   Inputs.addEnvironment = function(v){
@@ -175,7 +224,7 @@ module.exports = function(){
     if(_environments[__environment]){
       __bindings = _environments[__environment];
 
-      /* Overwrite Existing if There */
+      /* Flag Existing if There */
       __bindingKeys = __bindings[__key];
       if(!__bindingKeys){
         __bindings[__key] = [];
@@ -212,7 +261,7 @@ module.exports = function(){
       __keys = Object.keys(_environments[__environment]);
       loop:for(var x=0;x<__keys.length;x++){
         __k = __keys[x];
-        __key = _environments[__environment][__keys[x]];
+        __key = _environments[__environment][__k];
         for(var i=0;i<__key.length;i++){
           if(__key[i].name === __name){
             __key.splice(i,1);
@@ -222,6 +271,20 @@ module.exports = function(){
       }
       _bindingUpdateEvent({added:undefined,key:__k,name:__name,removed:__name,environment:__environment});
     }
+    return Inputs;
+  }
+
+  Inputs.replaceBinding = function(environment,name,type,key,func,shift,ctrl,alt){
+    var __environment = (typeof func === 'function' ? environment : 'default'),
+        __name = (typeof func === 'function' ? name : environment),
+        __type = (typeof func === 'function' ? type : name),
+        __key = (typeof func === 'function' ? key : type),
+        __func = (typeof func === 'function' ? func : key),
+        __shift = (typeof func === 'function' ? shift : func),
+        __ctrl = (typeof func === 'function' ? ctrl : shift),
+        __alt = (typeof func === 'function' ? alt : ctrl);
+    Inputs.removeBinding(__environment,__name);
+    Inputs.addBinding(__environment,__name,__type,__key,__func,__shift,__ctrl,__alt);
     return Inputs;
   }
 

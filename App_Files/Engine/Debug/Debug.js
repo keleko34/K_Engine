@@ -6,10 +6,11 @@ module.exports = function(){
       _debugging = false;
 
   function Debug(){
-    Engine.Input.removeBinding("Debug")
-    .addBinding("Debug","keyup","f3",Debug.toggleDebugging,true)
-    .removeBinding("Mouse Debug")
-    .addBinding("Mouse Debug","mousemove","left",Debug.mouse);
+    Engine.Input
+    .removeEnvironmentListener(Debug.environment)
+    .addEnvironmentListener(Debug.environment)
+    .replaceBinding("Debug","keyup","f3",Debug.toggleDebugging)
+    .replaceBinding("Mouse Debug","mousemove","left",Debug.mouse);
   }
 
 
@@ -40,6 +41,10 @@ module.exports = function(){
     else{
       WindowElements.debug.container.classList.add('hide');
     }
+  }
+
+  Debug.environment = function(e){
+    WindowElements.debug.environment.innerHTML = e.new;
   }
 
   Debug.debugging = function(v){

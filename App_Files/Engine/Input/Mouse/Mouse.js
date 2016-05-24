@@ -24,6 +24,8 @@ module.exports = function(){
              _onMouseEvents[_it]({shift:_shift,ctrl:_ctrl,alt:_alt,moveX:e.movementX,moveY:e.movementY,code:_code,key:_key,type:e.type,holding:(e._holding !== undefined ? true : false)});
            }
         }
+        e.movementX = 0;
+        e.movementY = 0;
       },
       _MouseEvent = function(e){
         e.preventDefault();
