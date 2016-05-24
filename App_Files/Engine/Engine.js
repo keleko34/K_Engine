@@ -57,11 +57,6 @@ module.exports = function(){
     return _renderBuffer;
   }
 
-  Engine.fps = function(){
-    return _fps;
-  }
-
-
   Engine.resolution = function(w,h){
     if(w === undefined){
       return _resolution;
@@ -73,7 +68,7 @@ module.exports = function(){
 
   Engine.debug = function(d){
     if(d === undefined && _Debug.debugging()){
-      _Debug.fps();
+      _Debug.fps().position();
     }
     else{
       _Debug.debugging(d);

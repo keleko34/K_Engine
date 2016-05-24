@@ -288,5 +288,11 @@ module.exports = function(){
     return Inputs;
   }
 
+  Inputs.clearHolds = function(){
+    _keyboard.clearHoldings();
+    _mouse.clearHoldings();
+    return Inputs;
+  }
+
   return Inputs;
 }

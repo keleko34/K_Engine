@@ -17,6 +17,7 @@ var _Window = WindowElements.gui.Window.get(),
         e.preventDefault();
         e.stopImmediatePropagation();
         _ViewPort.togglePointerLock(false);
+        Engine.Input.clearHolds();
       }
     },
     _resizeEvent = function(w,h){

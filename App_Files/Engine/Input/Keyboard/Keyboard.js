@@ -100,6 +100,15 @@ module.exports = function(){
     return KeyBoard;
   }
 
+  KeyBoard.clearHoldings = function(){
+    for(var x=0;x<_holding.length;x++){
+      if(_holding[x] && _holding[x].timer){
+        _holding[x].hold = false;
+        clearTimeout(_holding[x].timer);
+      }
+    }
+  }
+
   KeyBoard.key = function(v){
     if(v === undefined){
       return _key;

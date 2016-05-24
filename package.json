@@ -3,7 +3,9 @@
   "main": "init.html",
   "window": {
     "frame": false,
-    "toolbar": false
+    "toolbar": false,
+    "width":800,
+    "height":600
   },
   "version": "0.0.0",
   "description": "WEBGL Node-Webkit Engine",

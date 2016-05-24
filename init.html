@@ -19,6 +19,12 @@
         <li>x: <span id="mouseX">0</span></li>
         <li>y: <span id="mouseY">0</span></li>
       </ul>
+      <span class="debugTitle" id="posTitle">POS</span>
+      <ul id="pos">
+        <li>x: <span id="posX">0</span></li>
+        <li>y: <span id="posY">0</span></li>
+        <li>z: <span id="posZ">0</span></li>
+      </ul>
       <div id="environment">Default</div>
     </div>
     <div id="helper">
@@ -52,6 +58,11 @@
             max : document.getElementById('fpsmax'),
             avg : document.getElementById('fpsavg'),
             current : document.getElementById('fpscurrent'),
+          },
+          pos : {
+            x : document.getElementById('posX'),
+            y : document.getElementById('posY'),
+            z : document.getElementById('posZ'),
           },
           mouse : {
             x : document.getElementById('mouseX'),

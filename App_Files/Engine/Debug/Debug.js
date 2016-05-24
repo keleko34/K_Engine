@@ -1,8 +1,10 @@
 var path = process.cwd().replace(/\\/,"/")+"/App_Files/Engine/Debug",
-    CreateFPS = require(path+"/FPS/FPS");
+    CreateFPS = require(path+"/FPS/FPS"),
+    CreatePosition = require(path+"/Position/Position");
 
 module.exports = function(){
   var _fps = CreateFPS(),
+      _pos = CreatePosition(),
       _debugging = false;
 
   function Debug(){
@@ -23,6 +25,15 @@ module.exports = function(){
       WindowElements.debug.fps.current.innerHTML = _fps.current();
     }
     return Debug;
+  }
+
+  Debug.position = function(){
+    if(_debugging){
+      _pos.call();
+      WindowElements.debug.pos.x.innerHTML = _pos.x();
+      WindowElements.debug.pos.y.innerHTML = _pos.y();
+      WindowElements.debug.pos.z.innerHTML = _pos.z();
+    }
   }
 
   Debug.mouse = function(e){

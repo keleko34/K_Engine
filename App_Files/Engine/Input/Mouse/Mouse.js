@@ -122,12 +122,13 @@ module.exports = function(){
     return Mouse;
   }
 
-  Mouse.holding = function(v){
-    if(v === undefined){
-      return _holding;
+  Mouse.clearHoldings = function(){
+    for(var x=0;x<_holding.length;x++){
+      if(_holding[x] && _holding[x].timer){
+        _holding[x].hold = false;
+        clearTimeout(_holding[x].timer);
+      }
     }
-    _holding = !!v;
-    return Mouse;
   }
 
   Mouse.movementX = function(v){

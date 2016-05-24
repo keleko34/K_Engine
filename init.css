@@ -74,7 +74,13 @@ h1{
 }
 
 #debug #mouseTitle{
-  margin-left:200px;
+  margin-left:197px;
+}
+
+#debug #posTitle{
+  position: absolute;
+    left: 335px;
+    top: 0px;
 }
 
 #debug ul#fps{
@@ -92,6 +98,15 @@ h1{
   padding:0;
   position: absolute;
   left: 280px;
+  top: 0px;
+}
+
+#debug ul#pos{
+  list-style: none;
+  margin:0;
+  padding:0;
+  position: absolute;
+  left: 370px;
   top: 0px;
 }
 

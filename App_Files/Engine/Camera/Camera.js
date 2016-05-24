@@ -58,7 +58,6 @@ module.exports = function(){
        Engine.Input.environment('freemode')
         .copyBinding('Debug')
         .copyBinding("Toggle PointerLock");
-      console.log(Engine.Input.currentBindings());
     }
     else{
       Engine.Input.environment(_prevEnv);
@@ -86,7 +85,7 @@ module.exports = function(){
     var __phi = (90 - _lat) * Math.PI / 180,
         __theta = _lon * Math.PI / 180,
         __target = _camera.getWorldDirection()
-    console.log(__target,"lon",_lon,"lat",_lat,__phi,__theta);
+    //console.log(__target,"lon",_lon,"lat",_lat,__phi,__theta);
     __phi = THREE.Math.mapLinear(__phi, 0, Math.PI, 0, Math.PI/4);
 
     __target.x = _camera.position.x + 100 * Math.sin(__phi) * Math.cos(__theta);
