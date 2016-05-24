@@ -1,6 +1,5 @@
 module.exports = function(){
-  var _holding = false,
-      _holdTimer = null,
+  var _holding = [],
       _code = 0,
       _key = '',
       _movementX = 0,
@@ -30,32 +29,38 @@ module.exports = function(){
       _MouseEvent = function(e){
         e.preventDefault();
         e.stopPropagation();
-        if(e.type === 'mousedown' && !_holding){
-          /* Single Mouse Down Event Without holding */
-           _loopEvents(e);
-          _holding = true;
-          e._holding = true;
-          _holdTimer = setTimeout(function(){_MouseEvent(e);},1);
-        }
-        else if(_holding && (e.type === 'mouseup' || e.type === 'click' || e.type === 'dblclick')){
-          _holding = false;
+        if(_holding[e.button] === undefined){
+          _holding[e.button] = {};
         }
 
-        if(!_holding){
-          /* Standard Mouse Event */
+        if(_holding[e.button] !== undefined && _holding[e.button].hold && (e.type === 'mouseup' || e.type === 'click' || e.type === 'dblclick')){
+          _holding[e.button].hold = false;
+          if(_holding[e.button].timer){
+            clearTimeout(_holding[e.button].timer);
+          }
+          _holding.splice(e.button,1);
           _loopEvents(e);
         }
-        else if(_holding && e._holding && e.type === 'mousedown'){
-          /* Our Holding Events as we ignore all mousedown events during Holding */
-          if(_holdTimer){
-            clearTimeout(_holdTimer);
+
+        else if(_holding[e.button] !== undefined && !_holding[e.button].hold && e.type === "mousedown"){
+          /* Single Mouse Down Event Without holding */
+          _loopEvents(e);
+          _holding[e.button].hold = true;
+          _holding[e.button].timer = setTimeout(function(){_MouseEvent(e);},1);
+        }
+        else if(_holding[e.button] !== undefined && _holding[e.button].hold && _holding[e.button].timer && e.type === 'mousedown'){
+          if(_holding[e.button].timer){
+            clearTimeout(_holding[e.button].timer);
           }
           _loopEvents(e);
-          if(_holding){
-            _holdTimer = setTimeout(function(){_MouseEvent(e);},1);
+          if(_holding[e.button] !== undefined && _holding[e.button].hold){
+            _holding[e.button].timer = setTimeout(function(){_MouseEvent(e);},1);
           }
         }
-        else if(_holding && !e._holding && e.type === 'mousemove'){
+        else if(_holding[e.button] !== undefined && !_holding[e.button].hold){
+          _loopEvents(e);
+        }
+        else if(_holding[e.button] !== undefined && _holding[e.button].hold && e.type === 'mousemove'){
           _loopEvents(e);
         }
       }

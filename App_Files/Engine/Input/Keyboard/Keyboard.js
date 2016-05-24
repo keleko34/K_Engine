@@ -2,7 +2,9 @@ var base = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine/Input/Keyboard",
     CreateKeyCodes = require(base+"/KeyCodes");
 
 module.exports = function(){
-  var _keycodes = CreateKeyCodes(),
+  var _holding = [],
+      _holdtimer = null,
+      _keycodes = CreateKeyCodes(),
       _key = "",
       _code = 0,
       _shift = false,
@@ -11,9 +13,7 @@ module.exports = function(){
       _toggled = false,
       _onKeyEvents = [],
       _it = 0,
-      _keyEvent = function(e){
-        e.preventDefault();
-        e.stopPropagation();
+      _keyLoop = function(e){
         _code = e.keyCode;
         _key = _keycodes.codes()[_code];
         _shift = !!e.shiftKey;
@@ -23,6 +23,37 @@ module.exports = function(){
         for(_it=0;_it<_onKeyEvents.length;_it++){
           if(typeof _onKeyEvents[_it] === 'function'){
             _onKeyEvents[_it]({type:e.type,code:_code,key:_key,shift:_shift,ctrl:_ctrl,alt:_alt});
+          }
+        }
+      },
+      _keyEvent = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(_holding[e.keyCode] === undefined){
+          _holding[e.keyCode] = {};
+        }
+
+        if(_holding[e.keyCode] !== undefined && _holding[e.keyCode].hold && e.type === 'keyup'){
+          _holding[e.keyCode].hold = false;
+          if(_holding[e.keyCode].timer){
+            clearTimeout(_holding[e.keyCode].timer);
+          }
+          _holding.splice(e.keyCode,1);
+          _keyLoop(e);
+        }
+        else if(_holding[e.keyCode] !== undefined && !_holding[e.keyCode].hold && e.type === 'keydown'){
+          _keyLoop(e);
+          _holding[e.keyCode].hold = true;
+          _holding[e.keyCode].timer = setTimeout(function(){_keyEvent(e);},1);
+        }
+        else if(_holding[e.keyCode] !== undefined && _holding[e.keyCode].hold && _holding[e.keyCode].timer && e.type === 'keydown'){
+          /* Our Holding Events as we ignore all keydown events during Holding */
+          if(_holding[e.keyCode].timer){
+            clearTimeout(_holding[e.keyCode].timer);
+          }
+          _keyLoop(e);
+          if(_holding[e.keyCode] !== undefined && _holding[e.keyCode].hold){
+            _holding[e.keyCode].timer = setTimeout(function(){_keyEvent(e);},1);
           }
         }
       }
