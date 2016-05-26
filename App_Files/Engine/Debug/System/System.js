@@ -2,19 +2,23 @@ var os = require('os');
 
 module.exports = function(){
   var _cpus = os.cpus(),
-      _cpuTime = {},
+      _totlaIdle = 0,
+      _totalTick = 0,
       _cpuAvg = 0,
       _ramTime = {},
       _totalRam = 0,
-      _appRam = 0;
+      _appRam = 0,
+      _it = 0,
+      _itKeys = [],
+      _itK = 0;
 
   function System(){
     _ramTime = process.memoryUsage();
-    _cpuTime = System.getcpuTime();
+    System.getcpuTime();
 
     _totalRam = os.totalmem();
-    _appRam = (100 - ~~(100 * _ramTime.heapUsed / _ramTime.heapTotal));
-    _cpuAvg = _cpuTime.map(function(k,i){return k.percentage;});
+    _appRam = (~~(_ramTime.rss / 1000000));
+    _cpuAvg = System.getcpuTime();
   }
 
   System.cpus = function(){
@@ -34,17 +38,17 @@ module.exports = function(){
   }
 
   System.getcpuTime = function(){
-    var totalIdle = 0, totalTick = 0,cpus = [];
+    _totlaIdle = 0;
+    _totalTick = 0;
 
-    for(var i = 0, len = _cpus.length; i < len; i++) {
-      var cpu = _cpus[i];
-      for(type in cpu.times) {
-        totalTick += cpu.times[type];
+    for(_it=0;_it<_cpus.length;_it++) {
+      _itKeys = Object.keys(_cpus[_it].times);
+      for(_itK=0;_itK<_itKeys.length;_itK++){
+        _totalTick += _cpus[_it].times[_itKeys[_itK]];
       }
-      totalIdle += cpu.times.idle;
-      cpus.push({idle: totalIdle,  total: totalTick, percentage: (100 - ~~(100 * totalIdle / totalTick))});
+      _totlaIdle += _cpus[_it].times.idle;
     }
-    return cpus;
+    return (100 - ~~(100 * (_totlaIdle / _cpus.length) / (_totalTick / _cpus.length)));
   }
 
   return System;

@@ -62,9 +62,9 @@ module.exports = function(){
   Debug.system = function(){
     if(_debugging){
       _system.call();
-      WindowElements.debug.system.cpuavg.innerHTML = _system.cpuAvg().reduce(function(o,k,i){return o+(i+1)+":"+k+"% ";},"");
+      WindowElements.debug.system.cpuavg.innerHTML = _system.cpuAvg()+"%";
       WindowElements.debug.system.totalram.innerHTML = parseInt(_system.totalRam()/1000000)+"MB";
-      WindowElements.debug.system.appram.innerHTML = _system.appRam()+"%";
+      WindowElements.debug.system.appram.innerHTML = _system.appRam()+"MB";
     }
   }
 
