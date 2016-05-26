@@ -1,5 +1,5 @@
 module.exports = function(){
-  var _pointerlock = false,
+    var _pointerlock = false,
       _ViewPort = WindowElements.viewport,
       _Context = _ViewPort.getContext('2d'),
       _width = parseInt(_ViewPort.getAttribute('width'),10),
@@ -21,17 +21,31 @@ module.exports = function(){
       },
       _pointerLockOn = function(){
         ViewPort.togglePointerLock(true);
+      },
+      _pointerLockOff = function(){
+        ViewPort.togglePointerLock(false);
+        Engine.Input.clearHolds();
       }
 
 
   function ViewPort(){
     WindowElements.document.removeEventListener('pointerlockchange',_pointerLockEvent);
     WindowElements.document.addEventListener('pointerlockchange',_pointerLockEvent);
+    ViewPort.resize(Win.get().width,Win.get().height);
+    ViewPort.togglePointerLock(true);
+    Engine.Input
+    .replaceBinding("Toggle PointerLock","dblclick","left",_pointerLockOn)
+    .replaceBinding("PointerLock Off","keyup","esc",_pointerLockOff);
 
-    _ViewPort.setAttribute('height',_height);
-    _ViewPort.setAttribute('width',_width);
+    Win.Controls().removeControlListener('resize',ViewPort.resize)
+    .addControlListener('resize',ViewPort.resize);
+  }
 
-    Engine.Input.replaceBinding("Toggle PointerLock","dblclick","left",_pointerLockOn);
+  ViewPort.resize = function(w,h){
+    _width = w;
+    _height = h;
+    _ViewPort.setAttribute('height',h);
+    _ViewPort.setAttribute('width',w);
   }
 
   ViewPort.view = function(){
