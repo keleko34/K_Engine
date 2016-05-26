@@ -57,7 +57,8 @@ module.exports = function(){
       _prevEnv = Engine.Input.environment();
        Engine.Input.environment('freemode')
         .copyBinding('Debug')
-        .copyBinding("Toggle PointerLock");
+        .copyBinding("Toggle PointerLock")
+        .copyBinding("PointerLock Off");
     }
     else{
       Engine.Input.environment(_prevEnv);

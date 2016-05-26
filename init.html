@@ -25,11 +25,17 @@
         <li>y: <span id="posY">0</span></li>
         <li>z: <span id="posZ">0</span></li>
       </ul>
-      <span class="debugTitle" id="sceneTitle">Scene</span>
+      <span class="debugTitle" id="sceneTitle">SCENE</span>
       <ul id="scene">
-        <li>Vertices: <span>0</span></li>
-        <li>Faces: <span>0</span></li>
-        <li>Meshes: <span>0</span></li>
+        <li>Vertices: <span id="vertices">0</span></li>
+        <li>Faces: <span id="faces">0</span></li>
+        <li>Meshes: <span id="meshes">0</span></li>
+      </ul>
+      <span class="debugTitle" id="systemTitle">SYSTEM</span>
+      <ul id="system">
+        <li>total ram: <span id="totalram">0</span></li>
+        <li>app ram use: <span id="appram">0</span></li>
+        <li>cpu: <span id="cpuavg">0</span></li>
       </ul>
       <div id="environment">Default</div>
     </div>
@@ -69,6 +75,16 @@
             x : document.getElementById('posX'),
             y : document.getElementById('posY'),
             z : document.getElementById('posZ'),
+          },
+          mesh : {
+            vertices : document.getElementById('vertices'),
+            faces : document.getElementById('faces'),
+            meshes : document.getElementById('meshes'),
+          },
+          system : {
+            cpuavg : document.getElementById('cpuavg'),
+            totalram : document.getElementById('totalram'),
+            appram : document.getElementById('appram'),
           },
           mouse : {
             x : document.getElementById('mouseX'),

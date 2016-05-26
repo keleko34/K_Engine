@@ -68,6 +68,7 @@ h1{
   position: absolute;
   background: rgba(255,255,255,0.1);
   top: 20px;
+  height:45px;
   width: 100%;
   color: #FFF;
   font-size: 12px;
@@ -129,13 +130,13 @@ h1{
   right:10px;
   font-size:18px;
   font-weight:bold;
-  top:20px;
+  top:50px;
 }
 
 #helper {
   background:transparent;
   position:absolute;
-  top:40px;
+  top:70px;
   left:0px;
   font-size: 16px;
 }
@@ -150,4 +151,30 @@ h1{
 #helper ul li span{
   font-style: italic;
   color:rgba(250,250,250,0.8)
+}
+
+#sceneTitle {
+  position: absolute;
+    left: 0px;
+    top: 14px;
+}
+
+#scene {
+  list-style: none;
+    position: absolute;
+    top: 2px;
+    left: 10px;
+}
+
+#systemTitle {
+      position: absolute;
+    left: 0px;
+    top: 28px;
+}
+
+#system {
+  list-style: none;
+    position: absolute;
+    top: 15px;
+    left: 20px;
 }

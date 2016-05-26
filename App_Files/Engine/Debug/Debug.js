@@ -1,10 +1,14 @@
 var path = process.cwd().replace(/\\/,"/")+"/App_Files/Engine/Debug",
     CreateFPS = require(path+"/FPS/FPS"),
-    CreatePosition = require(path+"/Position/Position");
+    CreatePosition = require(path+"/Position/Position"),
+    CreateMeshCount = require(path+"/MeshCount/MeshCount"),
+    CreateSystem = require(path+"/System/System");
 
 module.exports = function(){
   var _fps = CreateFPS(),
       _pos = CreatePosition(),
+      _meshcount = CreateMeshCount(),
+      _system = CreateSystem(),
       _debugging = false;
 
   function Debug(){
@@ -34,6 +38,7 @@ module.exports = function(){
       WindowElements.debug.pos.y.innerHTML = _pos.y();
       WindowElements.debug.pos.z.innerHTML = _pos.z();
     }
+    return Debug;
   }
 
   Debug.mouse = function(e){
@@ -42,6 +47,25 @@ module.exports = function(){
       WindowElements.debug.mouse.y.innerHTML = e.moveY;
     }
     return Debug;
+  }
+
+  Debug.meshes = function(){
+    if(_debugging){
+      _meshcount.call();
+      WindowElements.debug.mesh.vertices.innerHTML = _meshcount.vertices();
+      WindowElements.debug.mesh.faces.innerHTML = _meshcount.faces();
+      WindowElements.debug.mesh.meshes.innerHTML = _meshcount.meshes();
+    }
+    return Debug;
+  }
+
+  Debug.system = function(){
+    if(_debugging){
+      _system.call();
+      WindowElements.debug.system.cpuavg.innerHTML = _system.cpuAvg().reduce(function(o,k,i){return o+(i+1)+":"+k+"% ";},"");
+      WindowElements.debug.system.totalram.innerHTML = parseInt(_system.totalRam()/1000000)+"MB";
+      WindowElements.debug.system.appram.innerHTML = _system.appRam()+"%";
+    }
   }
 
   Debug.toggleDebugging = function(){
