@@ -26,7 +26,7 @@ module.exports = function(){
     .replaceBinding("freemode","moveback","keydown","s",Camera.move)
     .replaceBinding("freemode","moveleft","keydown","a",Camera.move)
     .replaceBinding("freemode","movedown","keydown","q",Camera.move)
-    .replaceBinding("freemode","moveup","keydown","e",Camera.move)
+    .replaceBinding("freemode","moveup","keydown","e",Camera.move);
 
     _camera.updateProjectionMatrix();
   }
