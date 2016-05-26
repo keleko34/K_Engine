@@ -6,11 +6,11 @@ module.exports = function(){
       _width = 0,
       _height = 0,
       _lookXSpeed = 10,
-      _lookYSpeed = 20,
+      _lookYSpeed = 15,
       _moveSpeed = 4,
       _forwardMultiplier = 0,
-      _lon = 95,
-      _lat = 450;
+      _lon = 90,
+      _lat = 180;
 
   function Camera(){
     _camera = new THREE.PerspectiveCamera( 45, (_width / _height), 1, 10000 );
@@ -82,11 +82,11 @@ module.exports = function(){
     _lon += Math.min(Math.max(e.moveX, -_lookXSpeed), _lookXSpeed); //Here we limit the speed the user can look on X axis
     _lat -= -Math.min(Math.max(e.moveY, -_lookYSpeed), _lookYSpeed); //Here we limit the speed the user can look on Y axis
 
+    _lat = Math.max(95, Math.min(255,_lat)); //constrains y axis
+
     var __phi = (90 - _lat) * Math.PI / 180,
         __theta = _lon * Math.PI / 180,
         __target = _camera.getWorldDirection()
-    //console.log(__target,"lon",_lon,"lat",_lat,__phi,__theta);
-    __phi = THREE.Math.mapLinear(__phi, 0, Math.PI, 0, Math.PI/4);
 
     __target.x = _camera.position.x + 100 * Math.sin(__phi) * Math.cos(__theta);
     __target.y = _camera.position.y + 100 * Math.cos(__phi);
