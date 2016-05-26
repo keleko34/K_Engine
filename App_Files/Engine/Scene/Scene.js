@@ -1,5 +1,6 @@
 module.exports = function(){
   var _scene = new THREE.Scene(),
+      _Camera = {},
       _LODS = {High:[],Mid:[],Low:[]},
       _HighpolyDistance = 30,
       _MidPolyDistance = 50,
@@ -12,7 +13,9 @@ module.exports = function(){
   function Scene(){
     /* Lods loaded based on vertice positions contained within viewAngle (Must use maths), loadarea based on position */
     for(_it=_scene.children.length-1;_it>=0;_it--){
-      _scene.remove(_scene.children[_it]);
+      if(_scene.children[_it] instanceof THREE.Mesh){
+         _scene.remove(_scene.children[_it]);
+      }
     }
 
     for(_it=0;_it<_LODS.High.length;_it++){
@@ -24,6 +27,7 @@ module.exports = function(){
     for(_it=0;_it<_LODS.Low.length;_it++){
       _scene.add(_LODS.Low[_it]);
     }
+    return _scene;
   }
 
   Scene.scene = function(){
