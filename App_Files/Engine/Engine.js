@@ -74,6 +74,7 @@ module.exports = function(){
   Engine.draw = function(){
     /* REGION Test */
     _test.call();
+    _SkyBox.renderTexture();
     /* ENDREGION Test */
 
     _Scene.call();

@@ -18,16 +18,32 @@ module.exports = function(){
     _shader = THREE.ShaderLib["cube"];
     _uniform = THREE.UniformsUtils.clone(_shader.uniforms);
 
-    _textures = _textureLoader.load(_currentSet);
-    _uniform['tCube'].texture = _textures;
-    _material = new THREE.ShaderMaterial({
-      fragmentShader:_shader.fragmentShader,
-      vertexShader:_shader.vertexShader,
-      uniforms:_uniform,
-      side: THREE.BackSide
+    _textures = _textureLoader.load(_currentSet,function(tx){
+      _uniform['tCube'].texture = tx;
     });
 
+    _material = new THREE.ShaderMaterial({
+        fragmentShader:_shader.fragmentShader,
+        vertexShader:_shader.vertexShader,
+        uniforms:_uniform,
+        side: THREE.BackSide
+      });
+
     _skyBox = new THREE.Mesh(_box,_material);
+
+  }
+
+  SkyBox.renderTexture = function(){
+    if(_uniform['tCube'].texture){
+      _material = new THREE.ShaderMaterial({
+        fragmentShader:_shader.fragmentShader,
+        vertexShader:_shader.vertexShader,
+        uniforms:_uniform,
+        side: THREE.BackSide
+      });
+
+      _skyBox.material = _material;
+    }
   }
 
   SkyBox.sky = function(){
