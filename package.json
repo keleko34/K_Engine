@@ -4,8 +4,8 @@
   "window": {
     "frame": false,
     "toolbar": false,
-    "width":1280,
-    "height":720
+    "width": 1280,
+    "height": 720
   },
   "version": "0.0.0",
   "description": "WEBGL Node-Webkit Engine",
@@ -37,7 +37,9 @@
   "dependencies": {
     "nw": "0.14.5-sdk"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "three": "^0.77.1"
+  },
   "scripts": {
     "start": "node_modules\\nw\\nwjs\\nw ."
   },

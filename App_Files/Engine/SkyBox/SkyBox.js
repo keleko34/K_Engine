@@ -5,7 +5,8 @@ module.exports = function(){
   var _box = new THREE.CubeGeometry(10000,10000,10000,1,1,1,null),
       _currentSkyBox = 'evening',
       _currentSet = fs.readdirSync(path+"/"+_currentSkyBox).map(function(k,i){return path+"/"+_currentSkyBox+"/"+k}),
-      _textures = THREE.CubeTextureLoader(_currentSet),
+      _textureLoader = new THREE.CubeTextureLoader(),
+      _textures = {},
       _material = {},
       _shader = {},
       _uniform = {},
@@ -18,14 +19,16 @@ module.exports = function(){
     _shader = THREE.ShaderLib["cube"];
     _uniform = THREE.UniformsUtils.clone(_shader.uniforms);
 
+    _textures = _textureLoader.load(_currentSet);
     _uniform['tCube'].texture = _textures;
     _material = new THREE.ShaderMaterial({
-        fragmentShader:_shader.fragmentShader,
-        vertexShader:_shader.vertexShader,
-        uniforms:_uniform
+      fragmentShader:_shader.fragmentShader,
+      vertexShader:_shader.vertexShader,
+      uniforms:_uniform
     });
 
     _skyBox = new THREE.Mesh(_box,_material);
+    console.log("succesfull skybox");
   }
 
   SkyBox.sky = function(){
