@@ -4,6 +4,7 @@ var localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine",
     CreateCamera = require(localPath+"/Camera/Camera"),
     CreateScene = require(localPath+"/Scene/Scene"),
     CreateRenderer = require(localPath+"/Renderer/Renderer"),
+    CreateSkyBox = require(localPath+"/SkyBox/SkyBox"),
     CreateTest = require(localPath+"/test");
 
 module.exports = function(){
@@ -13,6 +14,7 @@ module.exports = function(){
       _Debug = CreateDebug(),
       _Camera = CreateCamera(),
       _Scene = CreateScene(),
+      _SkyBox = CreateSkyBox(),
       _resolution = {w:1920,h:1080},
       _test = CreateTest(),
       _togglePointer = function(){
@@ -28,9 +30,13 @@ module.exports = function(){
 
     _Renderer.call();
 
+    _SkyBox.call();
+
      /* REGION Test Code */
     _test.create();
-    _Scene.addHighPoly(_test.mesh()).addHighPoly(_test.floor());
+    _Scene.addHighPoly(_test.mesh())
+    .addHighPoly(_test.floor())
+    .addLowPoly(_SkyBox.sky());
     _Scene.scene().add(_test.light());
     /* ENDREGION Test Code */
   }
@@ -41,6 +47,7 @@ module.exports = function(){
   Engine.Renderer = _Renderer;
   Engine.Camera = _Camera;
   Engine.Scene = _Scene;
+  Engine.Skybox = _SkyBox;
 
   Engine.isRunning = function(v){
     if(v === undefined){
