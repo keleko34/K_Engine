@@ -33,7 +33,7 @@ module.exports = function(){
 
     _Renderer.call();
 
-    _SkyBox.call();
+    //_SkyBox.call();
 
      /* REGION Test Code */
     _test.create();
@@ -79,7 +79,6 @@ module.exports = function(){
   Engine.draw = function(){
     /* REGION Test */
     _test.call();
-    _SkyBox.renderTexture();
     /* ENDREGION Test */
 
     _Time.call();

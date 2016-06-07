@@ -4,10 +4,18 @@ module.exports = function(){
       _reileigh = 1,
       _mieCoefficient = 0.005,
       _mieDirectionalG = 0.8,
+      _inclination = 0.49,
+      _azimuth = 0.25,
       _sunPosition = new THREE.Vector3(),
-      _Shader = Engine.CreateShader();
+      _Shader = null,
+      _geo = new THREE.SphereBufferGeometry( 450000, 32, 15 ),
+      _mesh = {};
 
   function Sun(){
+    if(!_Shader){
+      _Shader = Engine.CreateShader();
+    }
+
     _Shader.fragment().clearInjects();
 
     _Shader.fragment().injectVars([
@@ -142,6 +150,14 @@ module.exports = function(){
       "gl_FragColor.a = 1.0;",
     ]);
 
-    _Shader.call();
+    _Shader.side(THREE.BackSide).call();
+
+    _mesh = new THREE.Mesh(_geo,_Shader.shader());
   }
+
+  Sun.mesh = function(){
+    return _mesh;
+  }
+
+  return Sun;
 }

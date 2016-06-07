@@ -16,7 +16,7 @@ module.exports = function(){
 		"}"
     ];
     _rules = _injectedVars.concat(_shaderRules);
-    _rules = _rules.splice((_rules.length-2),0,_injectedRules);
+    _rules.splice((_rules.length-2),0,_injectedRules);
     _rules = Array.prototype.concat.apply([],_rules);
   }
 

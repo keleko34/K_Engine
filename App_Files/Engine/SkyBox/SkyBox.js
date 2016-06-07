@@ -1,7 +1,9 @@
 /* SKYBOX will control the settings of the shaders based on the time of day, debug should allow for altering these as well */
 
 var fs = require('fs'),
-    path = process.cwd().replace(/\\/g,"/")+"/App_Files/Assets/skybox"
+    localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine/SkyBox",
+    path = process.cwd().replace(/\\/g,"/")+"/App_Files/Assets/skybox",
+    CreateSun = require(localPath+"/Sun/Sun");
 
 module.exports = function(){
   var _box = new THREE.CubeGeometry(10000, 10000, 10000,1,1,1,null,true),
@@ -13,7 +15,8 @@ module.exports = function(){
       _shader = {},
       _uniform = {},
       _setEnum = fs.readdirSync(path),
-      _skyBox = {};
+      _skyBox = {},
+      _Sun = CreateSun();
 
 
   function SkyBox(){
@@ -30,8 +33,9 @@ module.exports = function(){
         uniforms:_uniform,
         side: THREE.BackSide
       });
+    _Sun.call();
 
-    _skyBox = new THREE.Mesh(_box,_material);
+    _skyBox = _Sun.mesh();
 
   }
 

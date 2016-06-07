@@ -10,8 +10,9 @@ module.exports = function(){
 		"void main() {",
 		"}"
     ];
+    debugger;
     _rules = _injectedVars.concat(_shaderRules);
-    _rules = _rules.splice((_rules.length-1),0,_injectedRules);
+    _rules.splice((_rules.length-1),0,_injectedRules);
     _rules = Array.prototype.concat.apply([],_rules);
   }
 

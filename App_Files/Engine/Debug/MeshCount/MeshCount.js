@@ -12,7 +12,7 @@ module.exports = function(){
     _meshes = 0;
     for(_it=0;_it<Engine.Scene.scene().children.length;_it++){
       _cMesh = Engine.Scene.scene().children[_it];
-      if(_cMesh instanceof THREE.Mesh){
+      if(_cMesh instanceof THREE.Mesh && _cMesh.geometry.vertices !== undefined && _cMesh.geometry.faces !== undefined){
         _vertices += _cMesh.geometry.vertices.length;
         _faces += _cMesh.geometry.faces.length;
         _meshes += 1;
