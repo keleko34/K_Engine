@@ -1,7 +1,7 @@
 module.exports = function(){
   var _shaderRules = [],
       _injectedVars = [],
-      _injectRules = [],
+      _injectedRules = [],
       _rules = [];
 
   function VertexShader(){
@@ -16,8 +16,25 @@ module.exports = function(){
 		"}"
     ];
     _rules = _injectedVars.concat(_shaderRules);
-    _rules = _rules.splice((_rules.length-2),0,_injectRules);
+    _rules = _rules.splice((_rules.length-2),0,_injectedRules);
     _rules = Array.prototype.concat.apply([],_rules);
+  }
+
+  VertexShader.clearInjects = function(t){
+    if(t === undefined){
+      _injectedVars = [];
+      _injectedRules = [];
+      return VertexShader;
+    }
+    switch(t){
+      case 'vars':
+        _injectedVars = [];
+      break;
+      case 'rules':
+        _injectedRules = [];
+      break;
+    }
+    return VertexShader;
   }
 
   VertexShader.injectVars = function(v){

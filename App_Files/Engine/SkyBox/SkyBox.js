@@ -1,3 +1,5 @@
+/* SKYBOX will control the settings of the shaders based on the time of day, debug should allow for altering these as well */
+
 var fs = require('fs'),
     path = process.cwd().replace(/\\/g,"/")+"/App_Files/Assets/skybox"
 

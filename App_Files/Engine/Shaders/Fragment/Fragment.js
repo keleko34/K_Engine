@@ -1,17 +1,35 @@
 module.exports = function(){
   var _shaderRules = [],
       _injectedVars = [],
-      _injectRules = [],
+      _injectedRules = [],
       _rules = [];
 
   function FragmentShader(){
     _shaderRules = [
+        "varying vec3 vWorldPosition;",
 		"void main() {",
 		"}"
     ];
     _rules = _injectedVars.concat(_shaderRules);
-    _rules = _rules.splice((_rules.length-1),0,_injectRules);
+    _rules = _rules.splice((_rules.length-1),0,_injectedRules);
     _rules = Array.prototype.concat.apply([],_rules);
+  }
+
+  FragmentShader.clearInjects = function(t){
+    if(t === undefined){
+      _injectedVars = [];
+      _injectedRules = [];
+      return FragmentShader;
+    }
+    switch(t){
+      case 'vars':
+        _injectedVars = [];
+      break;
+      case 'rules':
+        _injectedRules = [];
+      break;
+    }
+    return FragmentShader;
   }
 
   FragmentShader.injectVars = function(v){

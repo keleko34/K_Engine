@@ -5,6 +5,7 @@ var localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine",
     CreateScene = require(localPath+"/Scene/Scene"),
     CreateRenderer = require(localPath+"/Renderer/Renderer"),
     CreateTime = require(localPath+"/Time/Time"),
+    CreateShader = require(localPath+"/Shaders/Shaders"),
     CreateSkyBox = require(localPath+"/SkyBox/SkyBox"),
     CreateTest = require(localPath+"/test");
 
@@ -50,6 +51,7 @@ module.exports = function(){
   Engine.Camera = _Camera;
   Engine.Scene = _Scene;
   Engine.Time = _Time;
+  Engine.CreateShader = CreateShader;
   Engine.Skybox = _SkyBox;
 
   Engine.isRunning = function(v){
