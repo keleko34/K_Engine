@@ -4,6 +4,7 @@ var localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine",
     CreateCamera = require(localPath+"/Camera/Camera"),
     CreateScene = require(localPath+"/Scene/Scene"),
     CreateRenderer = require(localPath+"/Renderer/Renderer"),
+    CreateTime = require(localPath+"/Time/Time"),
     CreateSkyBox = require(localPath+"/SkyBox/SkyBox"),
     CreateTest = require(localPath+"/test");
 
@@ -14,6 +15,7 @@ module.exports = function(){
       _Debug = CreateDebug(),
       _Camera = CreateCamera(),
       _Scene = CreateScene(),
+      _Time = CreateTime(),
       _SkyBox = CreateSkyBox(),
       _resolution = {w:1920,h:1080},
       _test = CreateTest(),
@@ -47,6 +49,7 @@ module.exports = function(){
   Engine.Renderer = _Renderer;
   Engine.Camera = _Camera;
   Engine.Scene = _Scene;
+  Engine.Time = _Time;
   Engine.Skybox = _SkyBox;
 
   Engine.isRunning = function(v){
@@ -77,6 +80,7 @@ module.exports = function(){
     _SkyBox.renderTexture();
     /* ENDREGION Test */
 
+    _Time.call();
     _Scene.call();
     return Engine;
   }
