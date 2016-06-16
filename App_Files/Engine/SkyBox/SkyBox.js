@@ -16,6 +16,7 @@ module.exports = function(){
       _uniform = {},
       _setEnum = fs.readdirSync(path),
       _skyBox = {},
+      _sunMesh = {},
       _Sun = CreateSun();
 
 
@@ -35,8 +36,8 @@ module.exports = function(){
       });
     _Sun.call();
 
-    _skyBox = _Sun.mesh();
-
+    _skyBox = _Sun.sky();
+    _sunMesh = _Sun.mesh();
   }
 
   SkyBox.renderTexture = function(){
@@ -54,6 +55,10 @@ module.exports = function(){
 
   SkyBox.sky = function(){
     return _skyBox;
+  }
+
+  SkyBox.sun = function(){
+    return _sunMesh;
   }
 
   SkyBox.textures = function(){

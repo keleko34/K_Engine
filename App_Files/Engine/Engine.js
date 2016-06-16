@@ -33,14 +33,15 @@ module.exports = function(){
 
     _Renderer.call();
 
-    //_SkyBox.call();
+    _SkyBox.call();
 
      /* REGION Test Code */
     _test.create();
     _Scene.addHighPoly(_test.mesh())
     .addHighPoly(_test.floor())
-    .addLowPoly(_SkyBox.sky());
-    _Scene.scene().add(_test.light());
+    .addLowPoly(_SkyBox.sky())
+    .addLowPoly(_SkyBox.sun());
+    //_Scene.scene().add(_test.light());
     /* ENDREGION Test Code */
   }
 

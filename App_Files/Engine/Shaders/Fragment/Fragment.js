@@ -7,6 +7,7 @@ module.exports = function(){
   function FragmentShader(){
     _shaderRules = [
         "varying vec3 vWorldPosition;",
+        "varying vec3 vPosition;",
 		"void main() {",
 		"}"
     ];

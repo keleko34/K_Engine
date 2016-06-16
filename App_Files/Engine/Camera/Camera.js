@@ -13,8 +13,8 @@ module.exports = function(){
       _lat = 180;
 
   function Camera(){
-    _camera = new THREE.PerspectiveCamera( 45, (_width / _height), 1, 10000 );
-    _camera.position.z += 800;
+    _camera = new THREE.PerspectiveCamera( 60, (_width / _height), 100, 2000000 );
+    _camera.position.set( 0, 100, 2000 );
     _camera.rotation.set( 0, 0, 0 );
 
     Engine.Input.addEnvironment('freemode')
