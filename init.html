@@ -46,11 +46,11 @@
       Engine.call();
 
 
-    function Main(){
+    function Main(timestamp){
 
       if(Engine.isRunning()){
         //console.log("Running");
-        Engine.draw().debug().render();
+        Engine.draw().Time(timestamp).debug().render();
         timer = requestAnimationFrame(Main);
       }
       else{

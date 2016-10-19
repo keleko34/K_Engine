@@ -90,7 +90,6 @@ module.exports = function(){
     _test.call();
     /* ENDREGION Test */
 
-    _Time.call();
     _Scene.call();
     return Engine;
   }

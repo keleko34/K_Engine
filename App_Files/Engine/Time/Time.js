@@ -2,9 +2,11 @@ module.exports = function(){
 
   var _tickTracker = Date.now(),
       _nextTickTracker = Date.now(),
+      _change = 0,
       _currentTick = 0,
       _currentTime = 0,
       _currentMinute = 0,
+      _currentHour = 0,
       _currentDay = 0,
       _currentMonth = 0,
       _currentSeason = 'summer',
@@ -23,7 +25,7 @@ module.exports = function(){
         }
       }
 
-  function Time(){
+  function Time(timeStamp){
     _nextTickTracker = Date.now();
     _currentTick += _nextTickTracker - _tickTracker;
     _tickTracker = _nextTickTracker;
@@ -57,6 +59,7 @@ module.exports = function(){
       }
       _onTickEvent();
     }
+    return this;
   }
 
   Time.addTickEvent = function(func){
@@ -94,6 +97,14 @@ module.exports = function(){
 
   Time.minute = function(){
     return _currentMinute;
+  }
+  
+  Time.realTime = function(){
+    return new Date().toLocaleString();
+  }
+  
+  Time.gameTime = function(){
+    
   }
 
   return Time;
