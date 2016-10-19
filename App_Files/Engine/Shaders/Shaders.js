@@ -7,16 +7,22 @@ module.exports = function(){
       _fragment = CreateFragment(),
       _shader = {},
       _uniforms = {},
+      _loadeduniforms = {},
       _side = THREE.FrontSide
 
   function Shader(){
     _vertex.call();
     _fragment.call();
-
+    
+    _loadeduniforms = THREE.UniformsUtils.clone(_uniforms);
+    Object.keys(_loadeduniforms).forEach(function(v){
+      _loadeduniforms[v].value = _uniforms[v];
+    });
+    
     _shader = new THREE.ShaderMaterial({
       vertexShader : _vertex.rules(),
       fragmentShader : _fragment.rules(),
-      uniforms : THREE.UniformsUtils.clone(_uniforms),
+      uniforms : _loadeduniforms,
       side : _side
     });
   }
@@ -30,6 +36,11 @@ module.exports = function(){
     }
     return Shader;
   }
+  
+  Shader.loadedUniforms = function(){
+    return _loadeduniforms;
+  }
+  
   Shader.clearUniforms = function(){
     _uniforms = {};
     return Shader;

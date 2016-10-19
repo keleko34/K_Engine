@@ -1,9 +1,10 @@
 module.exports = function(){
-  var _azimuth = 1.0,
+  var _azimuth = 0.5,
       _sunPosition = new THREE.Vector3(),
       _Shader = null,
       _geo = new THREE.SphereBufferGeometry( 450000, 32, 15),
       _skyMesh = {},
+      _logged = false,
       _sunMesh = new THREE.Mesh(
 					new THREE.SphereBufferGeometry( 0, 0, 0 ),
 					new THREE.MeshBasicMaterial( { color: 0xffffff } )
@@ -18,14 +19,12 @@ module.exports = function(){
 
     _Shader.fragment().injectVars([
       "uniform vec3 sunPosition;",
-    "const float luminance = 1.0;",
-		"const float turbidity = 10.0;",
+      "const float luminance = 1.0;",
+		"const float turbidity = 8.0;",
 		"const float reileigh = 2.0;",
 		"const float mieCoefficient = 0.005;",
 		"const float mieDirectionalG = 0.8;",
 
-		"varying vec3 vWorldPosition;",
-    "varying vec3 vPosition;",
 
 		"vec3 cameraPos = vec3(0.0, 0.0, 0.0);",
 
@@ -54,7 +53,7 @@ module.exports = function(){
 
 		"vec3 totalRayleigh(vec3 lambda)",
 		"{",
-			"return (8.0 * pow(pi, 3.0) * pow(pow(1.0003, 2.0) - 1.0, 2.0) * (6.0 + 3.0 * pn)) / (3.0 * 2.545E25 * pow(vec3(680E-9, 550E-9, 450E-9), vec3(4.0)) * (6.0 - 7.0 * 0.035));",
+			"return (8.0 * pow(abs(pi), 3.0) * pow(abs(pow(1.0003, 2.0) - 1.0), 2.0) * (6.0 + 3.0 * pn)) / (3.0 * 2.545E25 * pow(abs(vec3(680E-9, 550E-9, 450E-9)), vec3(4.0)) * (6.0 - 7.0 * 0.035));",
 		"}",
 
 		"vec3 simplifiedRayleigh()",
@@ -64,25 +63,25 @@ module.exports = function(){
 
 		"float rayleighPhase(float cosTheta)",
 		"{	 ",
-			"return (3.0 / (16.0*pi)) * (1.0 + pow(cosTheta, 2.0));",
-		"//	return (1.0 / (3.0*pi)) * (1.0 + pow(cosTheta, 2.0));",
-		"//	return (3.0 / 4.0) * (1.0 + pow(cosTheta, 2.0));",
+			"return (3.0 / (16.0*pi)) * (1.0 + pow(abs(cosTheta), 2.0));",
+		"//	return (1.0 / (3.0*pi)) * (1.0 + pow(abs(cosTheta), 2.0));",
+		"//	return (3.0 / 4.0) * (1.0 + pow(abs(cosTheta), 2.0));",
 		"}",
 
 		"vec3 totalMie(vec3 lambda, vec3 K, float T)",
 		"{",
 			"float c = (0.2 * T ) * 10E-18;",
-			"return 0.434 * c * pi * pow((2.0 * pi) / lambda, vec3(v - 2.0)) * K;",
+			"return 0.434 * c * pi * pow(abs((2.0 * pi) / lambda), vec3(v - 2.0)) * K;",
 		"}",
 
 		"float hgPhase(float cosTheta, float g)",
 		"{",
-			"return (1.0 / (4.0*pi)) * ((1.0 - pow(g, 2.0)) / pow(1.0 - 2.0*g*cosTheta + pow(g, 2.0), 1.5));",
+			"return (1.0 / (4.0*pi)) * ((1.0 - pow(abs(g), 2.0)) / pow(abs(1.0 - 2.0*g*cosTheta + pow(abs(g), 2.0)), 1.5));",
 		"}",
 
 		"float sunIntensity(float zenithAngleCos)",
 		"{",
-			"return EE * max(0.0, 1.0 - pow(e, -((cutoffAngle - acos(zenithAngleCos))/steepness)));",
+			"return EE * max(0.0, 1.0 - pow(abs(e), -((cutoffAngle - acos(zenithAngleCos))/steepness)));",
 		"}",
 
 		"float A = 0.15;",
@@ -118,8 +117,8 @@ module.exports = function(){
 			"vec3 betaM = totalMie(lambda, K, turbidity) * mieCoefficient;",
 
 			"float zenithAngle = acos(max(0.0, dot(up, normalize(vWorldPosition - cameraPos))));",
-			"float sR = rayleighZenithLength / (cos(zenithAngle) + 0.15 * pow(93.885 - ((zenithAngle * 180.0) / pi), -1.253));",
-			"float sM = mieZenithLength / (cos(zenithAngle) + 0.15 * pow(93.885 - ((zenithAngle * 180.0) / pi), -1.253));",
+			"float sR = rayleighZenithLength / (cos(zenithAngle) + 0.15 * pow(abs(93.885 - ((zenithAngle * 180.0) / pi)), -1.253));",
+			"float sM = mieZenithLength / (cos(zenithAngle) + 0.15 * pow(abs(93.885 - ((zenithAngle * 180.0) / pi)), -1.253));",
 
 
 
@@ -136,8 +135,8 @@ module.exports = function(){
 			"vec3 betaMTheta = betaM * mPhase;",
 
 
-			"vec3 Lin = pow(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * (1.0 - Fex),vec3(1.5));",
-			"Lin *= mix(vec3(1.0),pow(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * Fex,vec3(1.0/2.0)),clamp(pow(1.0-dot(up, sunDirection),5.0),0.0,1.0));",
+			"vec3 Lin = pow(abs(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * (1.0 - Fex)),vec3(1.5));",
+			"Lin *= mix(vec3(1.0),pow(abs(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * Fex),vec3(1.0/2.0)),clamp(pow(abs(1.0-dot(up, sunDirection)),5.0),0.0,1.0));",
 
 			"//nightsky",
 			"vec3 direction = normalize(vWorldPosition - cameraPos);",
@@ -166,29 +165,25 @@ module.exports = function(){
 
 			"float ExposureBias = fLumCompressed;",
 
-			"vec3 curr = Uncharted2Tonemap((log2(2.0/pow(luminance,4.0)))*texColor);",
+			"vec3 curr = Uncharted2Tonemap((log2(2.0/pow(abs(luminance),4.0)))*texColor);",
 			"vec3 color = curr*whiteScale;",
 
-			"vec3 retColor = pow(color,vec3(1.0/(1.2+(1.2*sunfade))));",
+			"vec3 retColor = pow(abs(color),vec3(1.0/(1.2+(1.2*sunfade))));",
 
 
 			"gl_FragColor.rgb = retColor;",
 
 			"gl_FragColor.a = 1.0;"
     ]);
-
-    _Shader.side(THREE.BackSide).call();
-
-    _skyMesh = new THREE.Mesh(_geo,_Shader.shader());
-
-    var theta = Math.PI * ( 1.0 - 0.5 );
-    var phi = 2 * Math.PI * ( _azimuth - 0.5 );
-
-    _sunMesh.position.x = 400000 * Math.cos( phi );
-    _sunMesh.position.y = 400000 * Math.sin( phi ) * Math.sin( theta );
-    _sunMesh.position.z = 400000 * Math.sin( phi ) * Math.cos( theta );
-
+    
     _Shader.Uniform('sunPosition',_sunMesh.position);
+    
+    _sunMesh.visible = false;
+    
+    _Shader.side(THREE.BackSide).call();
+    Sun.updateTime(_azimuth);
+    _skyMesh = new THREE.Mesh(_geo,_Shader.shader());
+    Sun.updateTime(0.5003);
   }
 
   Sun.sky = function(){
@@ -207,7 +202,8 @@ module.exports = function(){
     _sunMesh.position.x = 400000 * Math.cos( phi );
     _sunMesh.position.y = 400000 * Math.sin( phi ) * Math.sin( theta );
     _sunMesh.position.z = 400000 * Math.sin( phi ) * Math.cos( theta );
-
+    console.log("phi ",phi,Math.sin(phi),"theta ",theta,Math.sin(theta),_sunMesh.position.x,_sunMesh.position.y,_sunMesh.position.z);
+    _Shader.loadedUniforms().sunPosition.value.copy(_sunMesh.position);
     _Shader.Uniform('sunPosition',_sunMesh.position);
   }
 
