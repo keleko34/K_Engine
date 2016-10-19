@@ -7,43 +7,13 @@
   <body>
     <div id="topbar"><h1>My Engine</h1><button id="minimize">_</button><button id="maximize">&#9633;</button><button id="close">X</button></div>
     <div id="debug" class="hide">
-      <span class="debugTitle">FPS</span>
-      <ul id="fps">
-        <li>Min: <span id="fpsmin">0</span></li>
-        <li>Max: <span id="fpsmax">0</span></li>
-        <li>Avg: <span id="fpsavg">0</span></li>
-        <li>Current: <span id="fpscurrent">0</span></li>
-      </ul>
-      <span class="debugTitle" id="mouseTitle">MOUSE</span>
-      <ul id="mouse">
-        <li>x: <span id="mouseX">0</span></li>
-        <li>y: <span id="mouseY">0</span></li>
-      </ul>
-      <span class="debugTitle" id="posTitle">POS</span>
-      <ul id="pos">
-        <li>x: <span id="posX">0</span></li>
-        <li>y: <span id="posY">0</span></li>
-        <li>z: <span id="posZ">0</span></li>
-      </ul>
-      <span class="debugTitle" id="sceneTitle">SCENE</span>
-      <ul id="scene">
-        <li>Vertices: <span id="vertices">0</span></li>
-        <li>Faces: <span id="faces">0</span></li>
-        <li>Meshes: <span id="meshes">0</span></li>
-      </ul>
-      <span class="debugTitle" id="systemTitle">SYSTEM</span>
-      <ul id="system">
-        <li>ram: <span id="totalram">0</span></li>
-        <li>app: <span id="appram">0</span></li>
-        <li>cpu: <span id="cpuavg">0</span></li>
-      </ul>
       <div id="environment">Default</div>
     </div>
     <div id="helper">
       <ul>
         <li>Esc - <span>Unlock</span></li>
         <li>F3 - <span>Debug</span></li>
-        <li>F5 - <span>ModeSwitch</span></li>
+        <li>F5 - <span>Fly Cam</span></li>
         <li>F11 - <span>Fullscreen</span></li>
       </ul>
     </div>
@@ -63,39 +33,13 @@
         },
         viewport : document.getElementById('viewport'),
         debug : {
-          container : document.getElementById('debug'),
-          environment : document.getElementById('environment'),
-          fps : {
-            min : document.getElementById('fpsmin'),
-            max : document.getElementById('fpsmax'),
-            avg : document.getElementById('fpsavg'),
-            current : document.getElementById('fpscurrent'),
-          },
-          pos : {
-            x : document.getElementById('posX'),
-            y : document.getElementById('posY'),
-            z : document.getElementById('posZ'),
-          },
-          mesh : {
-            vertices : document.getElementById('vertices'),
-            faces : document.getElementById('faces'),
-            meshes : document.getElementById('meshes'),
-          },
-          system : {
-            cpuavg : document.getElementById('cpuavg'),
-            totalram : document.getElementById('totalram'),
-            appram : document.getElementById('appram'),
-          },
-          mouse : {
-            x : document.getElementById('mouseX'),
-            y : document.getElementById('mouseY')
-          }
+          environment : document.getElementById('environment')
         },
         gui : require('nw.gui')
       };
       window.Win = global.Win = require('./App_Files/Window/Window').call();
       window.Engine = global.Engine = require('./App_Files/Engine/Engine').call();
-
+      
       /* ENDREGION Globals */
 
       Win.call();

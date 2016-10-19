@@ -209,7 +209,7 @@ module.exports = function(){
     _sunMesh.position.x = 400000 * Math.cos( phi );
     _sunMesh.position.y = 400000 * Math.sin( phi ) * Math.sin( theta );
     _sunMesh.position.z = 400000 * Math.sin( phi ) * Math.cos( theta );
-    console.log("phi ",phi,Math.sin(phi),"theta ",theta,Math.sin(theta),_sunMesh.position.x,_sunMesh.position.y,_sunMesh.position.z);
+    //console.log("phi ",phi,Math.sin(phi),"theta ",theta,Math.sin(theta),_sunMesh.position.x,_sunMesh.position.y,_sunMesh.position.z);
     _Shader.loadedUniforms().sunPosition.value.copy(_sunMesh.position);
     _Shader.Uniform('sunPosition',_sunMesh.position);
   }
