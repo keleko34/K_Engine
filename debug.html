@@ -3,56 +3,93 @@
   <head>
     <title>Debug</title>
     <link rel="stylesheet" href="debug.css" />
+    <script src="debug.js" type="text/javascript"></script>
   </head>
   <body>
     <h1 id="title">Debug Panel</h1>
-    <div class="Section">
-      <h3>FPS</h3>
-      <ul>
-        <li>Min: <span id="fps_min">60</span></li>
-        <li>Max: <span id="fps_max">0</span></li>
-        <li>Avg: <span id="fps_avg">60</span></li>
-        <li>Current: <span id="fps_current">60</span></li>
-      </ul>
+    <ul id="nav">
+      <li class="link active" id="info_link">Info</li>
+      <li class="seperator">/</li>
+      <li class="link" id="engine_link">Engine</li>
+      <li class="seperator">/</li>
+      <li class="link" id="game_link">Game</li>
+    </ul>
+    <div class="page active" id="info">
+      <div class="section">
+        <div class="section__title">
+          <div class="section__title__text">FPS</div>
+          <div class="section__title__line"></div>
+        </div>
+        <ul class="dropdown">
+          <li>Min: <span id="fps_min">60</span></li>
+          <li>Max: <span id="fps_max">0</span></li>
+          <li>Avg: <span id="fps_avg">60</span></li>
+          <li>Current: <span id="fps_current">60</span></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="section__title">
+          <div class="section__title__text">Mouse Velocity</div>
+          <div class="section__title__line"></div>
+        </div>
+        <ul class="dropdown">
+          <li>x: <span id="mouse_x">0</span></li>
+          <li>y: <span id="mouse_y">0</span></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="section__title">
+          <div class="section__title__text">Position</div>
+          <div class="section__title__line"></div>
+        </div>
+        <ul class="dropdown">
+          <li>x: <span id="pos_x">0</span></li>
+          <li>y: <span id="pos_y">0</span></li>
+          <li>z: <span id="pos_z">0</span></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="section__title">
+          <div class="section__title__text">Scene</div>
+          <div class="section__title__line"></div>
+        </div>
+        <ul class="dropdown">
+          <li>Vertices: <span id="scene_vertices">0</span></li>
+          <li>Faces: <span id="scene_faces">0</span></li>
+          <li>Meshes: <span id="scene_meshes">0</span></li>
+          <li>Lod Low Count: <span id="scene_lodlow">0</span></li>
+          <li>Lod Mid Count: <span id="scene_lodlmid">0</span></li>
+          <li>Lod High Count: <span id="scene_lodhigh">0</span></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="section__title">
+          <div class="section__title__text">System</div>
+          <div class="section__title__line"></div>
+        </div>
+        <ul class="dropdown">
+          <li>Ram: <span id="system_ram">0MB</span></li>
+          <li>App: <span id="system_app">0MB</span></li>
+          <li>Cpu: <span id="system_cpu">0%</span></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="section__title">
+          <div class="section__title__text">Time</div>
+          <div class="section__title__line"></div>
+        </div>
+        <ul class="dropdown">
+          <li>Local: <span id="time_local">00:00</span></li>
+          <li>Engine: <span id="time_engine">00:00</span></li>
+          <li>isNight: <span id="time_isnight">false</span></li>
+        </ul>
+      </div>
     </div>
-    <div class="Section">
-      <h3>Mouse Velocity</h3>
-      <ul>
-        <li>x: <span id="mouse_x">0</span></li>
-        <li>y: <span id="mouse_y">0</span></li>
-      </ul>
+    <div class="page" id="engine">
+    
     </div>
-    <div class="Section">
-      <h3>Position</h3>
-      <ul>
-        <li>x: <span id="pos_x">0</span></li>
-        <li>y: <span id="pos_y">0</span></li>
-        <li>z: <span id="pos_z">0</span></li>
-      </ul>
-    </div>
-    <div class="Section">
-      <h3>Scene</h3>
-      <ul>
-        <li>Vertices: <span id="scene_vertices">0</span></li>
-        <li>Faces: <span id="scene_faces">0</span></li>
-        <li>Meshes: <span id="scene_meshes">0</span></li>
-      </ul>
-    </div>
-    <div class="Section">
-      <h3>System</h3>
-      <ul>
-        <li>Ram: <span id="system_ram">0MB</span></li>
-        <li>App: <span id="system_app">0MB</span></li>
-        <li>Cpu: <span id="system_cpu">0%</span></li>
-      </ul>
-    </div>
-    <div class="Section">
-      <h3>Time</h3>
-      <ul>
-        <li>Local: <span id="time_local">00:00</span></li>
-        <li>Engine: <span id="time_engine">00:00</span></li>
-        <li>isNight: <span id="time_isnight">false</span></li>
-      </ul>
+    <div class="page" id="game">
+    
     </div>
   <script>
     var gui = require('nw.gui');
@@ -65,7 +102,11 @@
             sp.innerHTML = data[v];
           }
         });
-    }, false);  
+    }, false);
+    
+    setHeaderLines();
+    adddropdowns();
+    addNav();
   </script>
   </body>
 </html>

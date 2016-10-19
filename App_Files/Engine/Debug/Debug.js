@@ -67,7 +67,10 @@ module.exports = function(){
       _window.window.postMessage(JSON.stringify({
         scene_vertices: _meshcount.vertices(),
         scene_faces: _meshcount.faces(),
-        scene_meshes: _meshcount.meshes()
+        scene_meshes: _meshcount.meshes(),
+        scene_lodlow: _meshcount.lodlow(),
+        scene_lodmid: _meshcount.lodmid(),
+        scene_lodhigh: _meshcount.lodhigh()
       }),"*");
     }
     return Debug;
@@ -76,7 +79,6 @@ module.exports = function(){
   Debug.system = function(){
     if(_debugging && _window){
       _system.call();
-      
       _window.window.postMessage(JSON.stringify({
         system_ram: parseInt(_system.totalRam()/1000000)+"MB",
         system_app: _system.appRam()+"MB",
@@ -86,6 +88,7 @@ module.exports = function(){
   }
   
   Debug.window = function(v){
+    
     if(v && !_loading && _window === undefined){
       _loading = true;
         global.WindowElements.gui.Window.open('debug.html',{
@@ -101,6 +104,12 @@ module.exports = function(){
       _window.close();
       _window = undefined;
     }
+    
+    if(_window && _window.window.closed){
+      _debugging = false;
+      _window = undefined;
+    }
+    
     return Debug;
   }
   
@@ -110,12 +119,6 @@ module.exports = function(){
 
   Debug.toggleDebugging = function(){
     _debugging = !_debugging;
-    if(_debugging){
-      WindowElements.debug.container.classList.remove('hide');
-    }
-    else{
-      WindowElements.debug.container.classList.add('hide');
-    }
   }
 
   Debug.environment = function(e){
