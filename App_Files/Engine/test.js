@@ -32,10 +32,6 @@ module.exports = function(){
 
     _mesh = new THREE.Mesh( _geometry, material );
 
-    _floorMesh.castShadow = true;
-    _mesh.castShadow = true;
-    _wallRightMesh.castShadow = true;
-
     _floorMesh.recieveShadow = true;
     _mesh.recieveShadow = true;
     _wallRightMesh.recieveShadow = true;
@@ -43,6 +39,17 @@ module.exports = function(){
     //_light = new THREE.PointLight(0xffffff);
     //_light.position.set(-50,50,50);
     return Test;
+  }
+  
+  Test.startTestTime = function(Sun)
+  {
+    var currTime = Sun.time();
+    
+    Sun.updateTime((currTime === 1 ? 0 : (currTime += 0.0001)));
+    
+    setTimeout(function(){
+      Test.startTestTime(Sun);
+    },10);
   }
 
   Test.scene = function(){

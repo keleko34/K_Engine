@@ -19,9 +19,13 @@ module.exports = function(){
   SkyBox.sky = function(){
     return _skyBox;
   }
+  
+  SkyBox.sunMesh = function(){
+    return _sunMesh;
+  }
 
   SkyBox.sun = function(){
-    return _sunMesh;
+    return _Sun;
   }
 
   return SkyBox;

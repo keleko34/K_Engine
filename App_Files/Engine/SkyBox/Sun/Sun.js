@@ -183,7 +183,6 @@ module.exports = function(){
     _Shader.side(THREE.BackSide).call();
     Sun.updateTime(_azimuth);
     _skyMesh = new THREE.Mesh(_geo,_Shader.shader());
-    Sun.updateTime(0.5003);
   }
 
   Sun.sky = function(){
@@ -193,7 +192,15 @@ module.exports = function(){
   Sun.mesh = function(){
     return _sunMesh;
   }
-
+  
+  Sun.isNight = function(){
+    return (_sunMesh.position.y <= 0);
+  }
+  
+  Sun.time = function(){
+    return _azimuth;
+  }
+  
   Sun.updateTime = function(v){
     _azimuth = v;
     var theta = Math.PI * ( 1.0 - 0.5 );

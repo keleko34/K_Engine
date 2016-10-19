@@ -40,11 +40,13 @@ module.exports = function(){
     _Scene.addHighPoly(_test.mesh())
     .addHighPoly(_test.floor())
     .addLowPoly(_SkyBox.sky())
-    .addLowPoly(_SkyBox.sun());
+    .addLowPoly(_SkyBox.sunMesh());
     
     _test.walls().forEach(function(v){
       _Scene.addHighPoly(v);
     });
+    
+    _test.startTestTime(_SkyBox.sun())
     //_Scene.scene().add(_test.light());
     /* ENDREGION Test Code */
   }
