@@ -52,6 +52,14 @@ module.exports = function(){
         ]);
 
         _Shader.fragment().injectRules([
+
+            "uniform float iGlobalTime;",
+            "uniform vec2 iResolution;",
+
+            "varying vec2 fragCoord;",
+
+            "varying vec2 vUv;",
+
             "// Sky Background Color",
             "vec3 vColor = vec3( 0.0, 0.0, 0.1) * fragCoord.y / iResolution.y;",
 
