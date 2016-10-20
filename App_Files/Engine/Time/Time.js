@@ -8,9 +8,9 @@ module.exports = function(){
       _change = 0,
       _currentRate = 0,
       _rateDay = 10,
-      _rateDayMs = parseFloat((1000/((1000 * 60 * 60 * 24)/(1000 * 60 * (_rateDay/24) * 24))).toFixed(3)),
+      _rateDayMs = parseFloat((1000/((60 * 24)/_rateDay)).toFixed(3)),
       _rateNight = 8,
-      _rateNightMs = parseFloat((1000/((1000 * 60 * 60 * 24)/(1000 * 60 * (_rateNight/24) * 24))).toFixed(3)),
+      _rateNightMs = parseFloat((1000/((60 * 24)/_rateNight)).toFixed(3)),
       _isDay = false,
       _update = 0,
       _seconds = 0,
@@ -131,14 +131,14 @@ module.exports = function(){
   Time.setDayRateInMinutes = function(min){
     min = (min === 0 ? 0.001 : min);
     _rateDay = min;
-    _rateDayMs = parseFloat((1000/((1000 * 60 * 60 * 24)/(1000 * 60 * (_rateDay/24) * 24))).toFixed(3),10);
+    _rateDayMs = parseFloat((1000/((60 * 24)/_rateDay)).toFixed(3),10);
     return Time;
   }
 
   Time.setNightRateInMinutes = function(min){
     min = (min === 0 ? 0.001 : min);
     _rateNight = min;
-    _rateNightMs = parseFloat((1000/((1000 * 60 * 60 * 24)/(1000 * 60 * (_rateNight/24) * 24))).toFixed(3),10);
+    _rateNightMs = parseFloat((1000/((60 * 24)/_rateNight)).toFixed(3),10);
     return Time;
   }
 
