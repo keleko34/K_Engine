@@ -85,6 +85,21 @@ module.exports = function(){
         system_cpu: _system.cpuAvg()+"%"
       }),"*");
     }
+    return Debug;
+  }
+
+  Debug.time = function(Time){
+    if(_debugging && _window){
+      var currentTime = new Date();
+      _window.window.postMessage(JSON.stringify({
+        time_local: (Time.formatTime(currentTime.getHours())+":"+Time.formatTime(currentTime.getMinutes())+":"+Time.formatTime(currentTime.getSeconds())),
+        time_engine: Time.getTime(),
+        time_isday: Time.isDay(),
+        time_daycycle: Time.rateDay(),
+        time_nightcycle: Time.rateNight()
+      }),"*");
+    }
+    return Debug;
   }
   
   Debug.window = function(v){
@@ -126,6 +141,22 @@ module.exports = function(){
         environment_mode: e.new
       }),"*");
     }
+  }
+
+  Debug.filterMessages = function(data){
+    Object.keys(data).forEach(function(v){
+      switch(v){
+        case 'time_engine':
+          Engine.Time.setTime.apply({},data[v].split(":").map(function(v){return parseInt(v);}));
+        break;
+        case 'time_daycycle':
+          Engine.Time.setDayRateInMinutes(data[v]);
+        break;
+        case 'time_nightcycle':
+          Engine.Time.setNightRateInMinutes(data[v]);
+        break;
+      }
+    });
   }
 
   Debug.debugging = function(v){

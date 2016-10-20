@@ -95,3 +95,14 @@ h1{
 .page.active {
   display: block;
 }
+
+.section input {
+  width:71px;
+  font-size: 18px;
+  margin-left:5px;
+  margin-top:5px;
+}
+
+.section input.time_cycle {
+  width:42px;
+}

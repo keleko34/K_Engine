@@ -81,7 +81,7 @@ module.exports = function(){
     _hours = (_hours >= 24 ? Math.floor(_hours - (24 * _hours/24)) : _hours);
     _month += (_day >= (_monthEnum[_month].days) ? Math.floor(_day/(_monthEnum[_month].days)) : 0);
     
-    _isDay = (_hours >= 6 && _hours <= 20);
+    _isDay = ((_hours > 5) && (_hours < 18));
     
     _day = (_day > (_monthEnum[_month].days) ? Math.floor(_day - ((_monthEnum[_month].days) * _day/(_monthEnum[_month].days))) : _day);
     _year += (_month >= 12 ? Math.floor(_month/12) : 0);
@@ -103,7 +103,7 @@ module.exports = function(){
     
     _standardtime_readable = Time.getStandardTime();
     
-    _date_readable = (formatTime(_day)+" "+_day_readable+", "+_month_readable+" "+_year);
+    _date_readable = (Time.formatTime(_day)+" "+_day_readable+", "+_month_readable+" "+_year);
     
     _timedate_readable = (_isStandard ? _standardtime_readable+" "+_date_readable : _time_readable+" "+_date_readable);
 
@@ -115,22 +115,22 @@ module.exports = function(){
     global.WindowElements.date.innerHTML = _date_readable;
   }
 
-  function formatTime(v){
+  Time.formatTime = function(v){
     return (v < 10 ? "0"+v : v);
   }
 
   Time.getStandardTime = function(h,m,s){
-    var h = (h === undefined || h === !0 ? formatTime((_hours > 12) ? (_hours - 12) : (_hours === 0 ? 12 : _hours)) : null),
-        m = (m === undefined || m === !0 ? formatTime(_minutes) : null),
-        s = (s === undefined || s === !0 ? formatTime(_seconds) : null);
+    var h = (h === undefined || h === !0 ? Time.formatTime((_hours > 12) ? (_hours - 12) : (_hours === 0 ? 12 : _hours)) : null),
+        m = (m === undefined || m === !0 ? Time.formatTime(_minutes) : null),
+        s = (s === undefined || s === !0 ? Time.formatTime(_seconds) : null);
 
     return (h ? h+(m ? ":" : (s ? " - " : " ")) : "")+(m ? m+(s ? ":" : " ") : "")+(s ? s+" " : "")+(_hours > 12 ? "PM" : "AM");
   }
 
   Time.getTime = function(h,m,s){
-    var h = (h === undefined || h === !0 ? formatTime(_hours) : null),
-        m = (m === undefined || m === !0 ? formatTime(_minutes) : null),
-        s = (s === undefined || s === !0 ? formatTime(_seconds) : null);
+    var h = (h === undefined || h === !0 ? Time.formatTime(_hours) : null),
+        m = (m === undefined || m === !0 ? Time.formatTime(_minutes) : null),
+        s = (s === undefined || s === !0 ? Time.formatTime(_seconds) : null);
 
     return (h ? h+(m ? ":" : (s ? " - " : " ")) : "")+(m ? m+(s ? ":" : " ") : "")+(s ? s+" " : "");
   }
@@ -151,6 +151,14 @@ module.exports = function(){
       }
     }
     return Time;
+  }
+
+  Time.rateDay = function(){
+    return _rateDay;
+  }
+
+  Time.rateNight = function(){
+    return _rateNight;
   }
 
   Time.setDayRateInMinutes = function(min){

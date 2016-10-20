@@ -73,7 +73,7 @@ module.exports = function(){
 
   Engine.debug = function(d){
     if(d === undefined && _Debug.debugging()){
-      _Debug.window(true).fps().position().meshes().system();
+      _Debug.window(true).fps().position().meshes().system().time(_Time);
       
     }
     else{
@@ -90,7 +90,7 @@ module.exports = function(){
 
     _Time.call();
     _Scene.call();
-    
+
     _SkyBox.sun().updateTime(_Time.rotation());
     return Engine;
   }
