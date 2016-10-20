@@ -31,8 +31,6 @@ module.exports = function(){
 		"const float e = 2.71828182845904523536028747135266249775724709369995957;",
 		"const float pi = 3.141592653589793238462643383279502884197169;",
 
-		"//const float n = 1.0003;",
-		"//const float N = 2.545E25;",
 		"const float pn = 0.035;",
 
 		"const vec3 lambda = vec3(680E-9, 550E-9, 450E-9);",
@@ -64,8 +62,6 @@ module.exports = function(){
 		"float rayleighPhase(float cosTheta)",
 		"{	 ",
 			"return (3.0 / (16.0*pi)) * (1.0 + pow(abs(cosTheta), 2.0));",
-		"//	return (1.0 / (3.0*pi)) * (1.0 + pow(abs(cosTheta), 2.0));",
-		"//	return (3.0 / 4.0) * (1.0 + pow(abs(cosTheta), 2.0));",
 		"}",
 
 		"vec3 totalMie(vec3 lambda, vec3 K, float T)",
@@ -101,10 +97,6 @@ module.exports = function(){
     _Shader.fragment().injectRules([
       "float sunfade = 1.0-clamp(1.0-exp((sunPosition.y/450000.0)),0.0,1.0);",
 
-			"// luminance =  1.0 ;// vWorldPosition.y / 450000. + 0.5; //sunPosition.y / 450000. * 1. + 0.5;",
-
-			 "// gl_FragColor = vec4(sunfade, sunfade, sunfade, 1.0);",
-
 			"float reileighCoefficient = reileigh - (1.0* (1.0-sunfade));",
 
 			"vec3 sunDirection = normalize(sunPosition);",
@@ -113,19 +105,14 @@ module.exports = function(){
 
 			"vec3 betaR = simplifiedRayleigh() * reileighCoefficient;",
 
-			"// mie coefficients",
 			"vec3 betaM = totalMie(lambda, K, turbidity) * mieCoefficient;",
 
 			"float zenithAngle = acos(max(0.0, dot(up, normalize(vWorldPosition - cameraPos))));",
 			"float sR = rayleighZenithLength / (cos(zenithAngle) + 0.15 * pow(abs(93.885 - ((zenithAngle * 180.0) / pi)), -1.253));",
 			"float sM = mieZenithLength / (cos(zenithAngle) + 0.15 * pow(abs(93.885 - ((zenithAngle * 180.0) / pi)), -1.253));",
 
-
-
-			"// combined extinction factor	",
 			"vec3 Fex = exp(-(betaR * sR + betaM * sM));",
 
-			"// in scattering",
 			"float cosTheta = dot(normalize(vWorldPosition - cameraPos), sunDirection);",
 
 			"float rPhase = rayleighPhase(cosTheta*0.5+0.5);",
@@ -143,13 +130,9 @@ module.exports = function(){
 			"float theta = acos(direction.y); // elevation --> y-axis, [-pi/2, pi/2]",
 			"float phi = atan(direction.z, direction.x); // azimuth --> x-axis [-pi/2, pi/2]",
 			"vec2 uv = vec2(phi, theta) / vec2(2.0*pi, pi) + vec2(0.5, 0.0);",
-			"// vec3 L0 = texture2D(skySampler, uv).rgb+0.1 * Fex;",
 			"vec3 L0 = vec3(0.1) * Fex;",
 
-			"// composition + solar disc",
-			"//if (cosTheta > sunAngularDiameterCos)",
 			"float sundisk = smoothstep(sunAngularDiameterCos,sunAngularDiameterCos+0.00002,cosTheta);",
-			"// if (normalize(vWorldPosition - cameraPos).y>0.0)",
 			"L0 += (sunE * 19000.0 * Fex)*sundisk;",
 
 
