@@ -1,6 +1,7 @@
 module.exports = function(){
 
-  var _startTick = Date.now(),
+  var _dateStart = new Date(),
+      _startTick = Date.now(),
       _tickTracker = Date.now(),
       _nextTickTracker = Date.now(),
       _prevTicks = 0,
@@ -14,14 +15,13 @@ module.exports = function(){
       _isDay = false,
       _update = 0,
       _seconds = 0,
-      _minutes = 0,
+      _minutes = _dateStart.getMinutes(),
       _hours = 0,
-      _day = 0,
-      _weekday = 0,
-      _day_readable = 'Monday',
+      _day = 1,
+      _weekday = _dateStart.getDay(),
       _dayEnum = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-      _month = 0,
-      _month_readable = '',
+      _day_readable = _dayEnum[_weekday]
+      _month = _dateStart.getMonth(),
       _monthEnum = [
         {name:"January",days:31},
         {name:"February",days:28},
@@ -35,17 +35,18 @@ module.exports = function(){
         {name:"October",days:31},
         {name:"November",days:30},
         {name:"December",days:31}],
+      _month_readable = _monthEnum[_month],
       _season = 0,
       _seasonMonths = [[8,9,10],[11,0,1],[2,3,4],[5,6,7]],
       _season_readable = 'Winter',
       _seasonsEnum = ['Fall','Winter','Spring','Summer'],
-      _year = 1970,
+      _year = _dateStart.getFullYear(),
       _daytime_milleseconds = 0,
       _time_readable = '',
       _standardtime_readable = '',
       _isStandard = false,
       _date_readable = '',
-      _timedate_readable,
+      _timedate_readable = '',
       _onTickUpdate = [],
       _onTickEvent = function(){
         for(var _it=0,len = _onTickUpdate.length;_it<len;_it++){
@@ -98,18 +99,42 @@ module.exports = function(){
     
     _daytime_milleseconds = (1000 * _seconds * _minutes * _hours);
     
-    _time_readable = (_hours+":"+_minutes+":"+_seconds);
+    _time_readable = Time.getTime();
     
-    _standardtime_readable = ((_hours > 12 ? (_hours - 12)+":"+_minutes+":"+_seconds+" PM " : _hours+":"+_minutes+":"+_seconds+" AM "));
+    _standardtime_readable = Time.getStandardTime();
     
-    _date_readable = (_day+" "+_day_readable+", "+_month_readable+" "+_year);
+    _date_readable = (formatTime(_day)+" "+_day_readable+", "+_month_readable+" "+_year);
     
     _timedate_readable = (_isStandard ? _standardtime_readable+" "+_date_readable : _time_readable+" "+_date_readable);
 
-    if((Math.floor(_ticks)-math.floor(_prevTicks)) !== 0){
+    if((Math.floor(_ticks)-Math.floor(_prevTicks)) !== 0){
       _onTickEvent();
     }
+
+    global.WindowElements.time.innerHTML = Time.getStandardTime(true,true,false);
+    global.WindowElements.date.innerHTML = _date_readable;
   }
+
+  function formatTime(v){
+    return (v < 10 ? "0"+v : v);
+  }
+
+  Time.getStandardTime = function(h,m,s){
+    var h = (h === undefined || h === !0 ? formatTime((_hours > 12) ? (_hours - 12) : (_hours === 0 ? 12 : _hours)) : null),
+        m = (m === undefined || m === !0 ? formatTime(_minutes) : null),
+        s = (s === undefined || s === !0 ? formatTime(_seconds) : null);
+
+    return (h ? h+(m ? ":" : (s ? " - " : " ")) : "")+(m ? m+(s ? ":" : " ") : "")+(s ? s+" " : "")+(_hours > 12 ? "PM" : "AM");
+  }
+
+  Time.getTime = function(h,m,s){
+    var h = (h === undefined || h === !0 ? formatTime(_hours) : null),
+        m = (m === undefined || m === !0 ? formatTime(_minutes) : null),
+        s = (s === undefined || s === !0 ? formatTime(_seconds) : null);
+
+    return (h ? h+(m ? ":" : (s ? " - " : " ")) : "")+(m ? m+(s ? ":" : " ") : "")+(s ? s+" " : "");
+  }
+
 
   Time.addTickEvent = function(func){
     if(typeof func === 'function'){
@@ -215,7 +240,8 @@ module.exports = function(){
   }
 
   Time.rotation = function(){
-    return ((_seconds + 60 * _minutes + 60 * 60 * _hours)/(60*60*24))*2;
+    var _rotation = ((_seconds + 60 * _minutes + 60 * 60 * _hours)/(60*60*24))+0.25;
+    return (_rotation > 1 ? (_rotation-1) : _rotation);
   }
 
   return Time;

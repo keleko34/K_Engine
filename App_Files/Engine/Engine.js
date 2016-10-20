@@ -31,10 +31,6 @@ module.exports = function(){
 
     _Scene.scene().add(_Camera.perspectiveCamera());
 
-    _Time.call();
-
-    _SkyBox.sun().setTime(_Time.rotation());
-
     _Renderer.call();
 
     _SkyBox.call();
@@ -92,7 +88,10 @@ module.exports = function(){
     _test.call();
     /* ENDREGION Test */
 
+    _Time.call();
     _Scene.call();
+    
+    _SkyBox.sun().updateTime(_Time.rotation());
     return Engine;
   }
 

@@ -64,75 +64,6 @@ h1{
   line-height: 0px;
 }
 
-#debug{
-  position: absolute;
-  background: rgba(255,255,255,0.1);
-  top: 20px;
-  height:45px;
-  width: 100%;
-  color: #FFF;
-  font-size: 12px;
-}
-
-#debug #mouseTitle{
-  margin-left:197px;
-}
-
-#debug #posTitle{
-  position: absolute;
-    left: 335px;
-    top: 0px;
-}
-
-#debug ul#fps{
-  list-style: none;
-  margin:0;
-  padding:0;
-  position: absolute;
-  left: 30px;
-  top: 0px;
-}
-
-#debug ul#mouse{
-  list-style: none;
-  margin:0;
-  padding:0;
-  position: absolute;
-  left: 280px;
-  top: 0px;
-}
-
-#debug ul#pos{
-  list-style: none;
-  margin:0;
-  padding:0;
-  position: absolute;
-  left: 370px;
-  top: 0px;
-}
-
-#debug li{
-  margin:1px 3px 0px 0px;
-  padding:0;
-  float:left;
-}
-
-.debugTitle{
-  font-size: 14px;
-}
-
-.hide{
-  display: none;
-}
-
-#environment {
-  position:absolute;
-  right:10px;
-  font-size:18px;
-  font-weight:bold;
-  top:50px;
-}
-
 #helper {
   background:transparent;
   position:absolute;
@@ -177,4 +108,22 @@ h1{
     position: absolute;
     top: 15px;
     left: 20px;
+}
+
+
+#time {
+  font-size: 28px;
+  background: transparent;
+  position: absolute;
+  right: 5px;
+  top:50px;
+  color: #FFFFFF;
+}
+
+#date {
+  font-size: 28px;
+  background: transparent;
+  position: absolute;
+  right: 5px;
+  color: #FFFFFF;
 }
