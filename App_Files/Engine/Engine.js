@@ -31,6 +31,7 @@ module.exports = function(){
 
     _Scene.scene().add(_Camera.perspectiveCamera());
 
+    _Time.call();
     _Renderer.call();
 
     _SkyBox.call();

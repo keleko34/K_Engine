@@ -88,7 +88,6 @@ module.exports = function(){
   }
   
   Debug.window = function(v){
-    
     if(v && !_loading && _window === undefined){
       _loading = true;
         global.WindowElements.gui.Window.open('debug.html',{
@@ -122,7 +121,11 @@ module.exports = function(){
   }
 
   Debug.environment = function(e){
-    WindowElements.debug.environment.innerHTML = e.new;
+    if(_debugging && _window){
+      _window.window.postMessage(JSON.stringify({
+        environment_mode: e.new
+      }),"*");
+    }
   }
 
   Debug.debugging = function(v){
