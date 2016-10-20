@@ -215,7 +215,7 @@ module.exports = function(){
   }
 
   Time.rotation = function(){
-    return ((1000 * _seconds * _minutes * _hours)/(1000 * 60 * 60 * 24)*2);
+    return ((_hours/24)*2)+(((_minutes/60)*2)/24)+(((_seconds/60)*2)/60);
   }
 
   return Time;
