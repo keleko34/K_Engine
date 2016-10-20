@@ -214,5 +214,9 @@ module.exports = function(){
     return _daytime_milleseconds;
   }
 
+  Time.rotation = function(){
+    return ((1000 * _seconds * _minutes * _hours)/(1000 * 60 * 60 * 24)*2);
+  }
+
   return Time;
 }

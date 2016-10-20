@@ -32,6 +32,9 @@ module.exports = function(){
     _Scene.scene().add(_Camera.perspectiveCamera());
 
     _Time.call();
+
+    _SkyBox.sun().setTime(_Time.rotation());
+
     _Renderer.call();
 
     _SkyBox.call();
@@ -46,8 +49,6 @@ module.exports = function(){
     _test.walls().forEach(function(v){
       _Scene.addHighPoly(v);
     });
-    
-    _test.startTestTime(_SkyBox.sun())
     //_Scene.scene().add(_test.light());
     /* ENDREGION Test Code */
   }
