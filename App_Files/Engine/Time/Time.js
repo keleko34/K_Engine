@@ -152,9 +152,9 @@ module.exports = function(){
   }
 
   Time.setTime = function(h,m,s){
-    _hours = (typeof h === 'number' ? h : _hours);
-    _minutes = (typeof h === 'number' ? h : _minutes);
-    _seconds = (typeof h === 'number' ? h : _seconds);
+    _hours = (typeof h === 'number' && h < 24 ? h : _hours);
+    _minutes = (typeof h === 'number' && m < 60 ? h : _minutes);
+    _seconds = (typeof h === 'number' && s < 60 ? h : _seconds);
     return Time;
   }
 
