@@ -76,7 +76,7 @@ function addSettings(win){
   var timeInput = document.querySelector('#date_time_input'),
       timeReg = /(\d){2}:(\d){2}:(\d){2}/,
       timecycles = Array.prototype.slice.call(document.querySelectorAll('.time_cycle')),
-      cycleReg = /(\d){4}/;
+      cycleReg = /(\d){1,4}/;
   timeInput.onkeyup = function(){
     var val = this.value;
     if(val.match(timeReg)){
