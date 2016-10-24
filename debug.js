@@ -20,7 +20,19 @@ var settings = {
     }
   },
   time_play:function(v){
-    
+    if(v){
+      var inp = document.querySelector('#play');
+    }
+    else{
+      var inp = document.querySelector('#pause');
+    }
+    if(document.activeElement.id !== inp.id){
+      var texts = Array.prototype.slice.call(document.querySelectorAll('#game_time .btn_text'));
+      texts.forEach(function(btn){
+        btn.classList.remove('active')
+      });
+      inp.classList.add('active');
+    }
   }
 };
 
