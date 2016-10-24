@@ -47,6 +47,7 @@ module.exports = function(){
       _isStandard = false,
       _date_readable = '',
       _timedate_readable = '',
+      _isPaused = false,
       _onTickUpdate = [],
       _onTickEvent = function(){
         for(var _it=0,len = _onTickUpdate.length;_it<len;_it++){
@@ -61,58 +62,62 @@ module.exports = function(){
     _currentRate = (_isDay ? _rateDayMs : _rateNightMs);
     _update = (_currentRate <= _change ? Math.floor(_change/_currentRate) : 0);
     _change = (_change - (_currentRate*_update));
-    
     _tickTracker = _nextTickTracker;
-    _prevTicks = _ticks;
-    _ticks = (_nextTickTracker - _startTick)/1000;
-    
-    _seconds += _update;
-    _minutes += (_seconds >= 60 ? Math.floor(_seconds/60) : 0);
-    
-    _seconds = (_seconds >= 60 ? Math.floor(_seconds - (60 * _seconds/60)) : Math.floor(_seconds));
-    _hours += (_minutes >= 60 ? Math.floor(_minutes/60) : 0);
-    
-    _minutes = (_minutes >= 60 ? Math.floor(_minutes - (60 * _minutes/60)) : _minutes);
-    _day += (_hours >= 24 ? Math.floor(_hours/24) : 0);
-    
-    _weekday = (_hours >= 24 ? (_weekday+1 === _dayEnum.length ? 0 : _weekday+1) : _weekday);
-    _day_readable = _dayEnum[_weekday];
-    
-    _hours = (_hours >= 24 ? Math.floor(_hours - (24 * _hours/24)) : _hours);
-    _month += (_day >= (_monthEnum[_month].days) ? Math.floor(_day/(_monthEnum[_month].days)) : 0);
-    
-    _isDay = ((_hours > 5) && (_hours < 18));
-    
-    _day = (_day > (_monthEnum[_month].days) ? Math.floor(_day - ((_monthEnum[_month].days) * _day/(_monthEnum[_month].days))) : _day);
-    _year += (_month >= 12 ? Math.floor(_month/12) : 0);
-    
-    _month = (_month >= 12 ? Math.floor(_month - (12 * _month/12)) : _month);
-    
-    _month_readable = _monthEnum[_month].name;
-    
-    _season = (_seasonMonths.reduce(function(o,v,i){
-      o = (v.indexOf(_month) !== -1 ? i : o);
-      return o;
-    },0));
-    
-    _season_readable = _seasonsEnum[_season];
-    
-    _daytime_milleseconds = (1000 * _seconds * _minutes * _hours);
-    
-    _time_readable = Time.getTime();
-    
-    _standardtime_readable = Time.getStandardTime();
-    
-    _date_readable = (Time.formatTime(_day)+" "+_day_readable+", "+_month_readable+" "+_year);
-    
-    _timedate_readable = (_isStandard ? _standardtime_readable+" "+_date_readable : _time_readable+" "+_date_readable);
 
-    if((Math.floor(_ticks)-Math.floor(_prevTicks)) !== 0){
-      _onTickEvent();
+    if(!_isPaused)
+    {
+
+      _prevTicks = _ticks;
+      _ticks = (_nextTickTracker - _startTick)/1000;
+      
+      _seconds += _update;
+      _minutes += (_seconds >= 60 ? Math.floor(_seconds/60) : 0);
+      
+      _seconds = (_seconds >= 60 ? Math.floor(_seconds - (60 * _seconds/60)) : Math.floor(_seconds));
+      _hours += (_minutes >= 60 ? Math.floor(_minutes/60) : 0);
+      
+      _minutes = (_minutes >= 60 ? Math.floor(_minutes - (60 * _minutes/60)) : _minutes);
+      _day += (_hours >= 24 ? Math.floor(_hours/24) : 0);
+      
+      _weekday = (_hours >= 24 ? (_weekday+1 === _dayEnum.length ? 0 : _weekday+1) : _weekday);
+      _day_readable = _dayEnum[_weekday];
+      
+      _hours = (_hours >= 24 ? Math.floor(_hours - (24 * _hours/24)) : _hours);
+      _month += (_day >= (_monthEnum[_month].days) ? Math.floor(_day/(_monthEnum[_month].days)) : 0);
+      
+      _isDay = ((_hours > 5) && (_hours < 18));
+      
+      _day = (_day > (_monthEnum[_month].days) ? Math.floor(_day - ((_monthEnum[_month].days) * _day/(_monthEnum[_month].days))) : _day);
+      _year += (_month >= 12 ? Math.floor(_month/12) : 0);
+      
+      _month = (_month >= 12 ? Math.floor(_month - (12 * _month/12)) : _month);
+      
+      _month_readable = _monthEnum[_month].name;
+      
+      _season = (_seasonMonths.reduce(function(o,v,i){
+        o = (v.indexOf(_month) !== -1 ? i : o);
+        return o;
+      },0));
+      
+      _season_readable = _seasonsEnum[_season];
+      
+      _daytime_milleseconds = (1000 * _seconds * _minutes * _hours);
+      
+      _time_readable = Time.getTime();
+      
+      _standardtime_readable = Time.getStandardTime();
+      
+      _date_readable = (Time.formatTime(_day)+" "+_day_readable+", "+_month_readable+" "+_year);
+      
+      _timedate_readable = (_isStandard ? _standardtime_readable+" "+_date_readable : _time_readable+" "+_date_readable);
+
+      if((Math.floor(_ticks)-Math.floor(_prevTicks)) !== 0){
+        _onTickEvent();
+      }
+
+      global.WindowElements.time.innerHTML = Time.getStandardTime(true,true,false);
+      global.WindowElements.date.innerHTML = _date_readable;
     }
-
-    global.WindowElements.time.innerHTML = Time.getStandardTime(true,true,false);
-    global.WindowElements.date.innerHTML = _date_readable;
   }
 
   Time.formatTime = function(v){
@@ -250,6 +255,16 @@ module.exports = function(){
   Time.rotation = function(){
     var _rotation = ((_seconds + 60 * _minutes + 60 * 60 * _hours)/(60*60*24))+0.25;
     return (_rotation > 1 ? (_rotation-1) : _rotation);
+  }
+
+  Time.togglePause = function(v)
+  {
+    _isPaused = !!v;
+    return Time;
+  }
+
+  Time.isPaused = function(){
+    return _isPaused;
   }
 
   return Time;

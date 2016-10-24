@@ -18,6 +18,9 @@ var settings = {
       v = v.toString();
       if(inp) inp.value = (v.length < 4 ? (new Array((5-v.length)).join("0")+v) : v);
     }
+  },
+  time_play:function(v){
+    
   }
 };
 
@@ -76,7 +79,9 @@ function addSettings(win){
   var timeInput = document.querySelector('#date_time_input'),
       timeReg = /(\d){2}:(\d){2}:(\d){2}/,
       timecycles = Array.prototype.slice.call(document.querySelectorAll('.time_cycle')),
-      cycleReg = /(\d){1,4}/;
+      cycleReg = /(\d){1,4}/,
+      playbtn = document.querySelector("#play"),
+      pausebtn = document.querySelector("#pause");
   timeInput.onkeyup = function(){
     var val = this.value;
     if(val.match(timeReg)){
@@ -113,4 +118,16 @@ function addSettings(win){
       }
     }
   });
+
+  playbtn.onclick = function(){
+    pausebtn.classList.remove('active');
+    this.classList.add('active');
+    win.postMessage(JSON.stringify({time_play:true}),"*")
+  }
+
+  pausebtn.onclick = function(){
+    playbtn.classList.remove('active');
+    this.classList.add('active');
+    win.postMessage(JSON.stringify({time_play:false}),"*")
+  }
 }

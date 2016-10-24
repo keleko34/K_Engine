@@ -106,3 +106,24 @@ h1{
 .section input.time_cycle {
   width:42px;
 }
+
+#game_time {
+  list-style: none;
+  margin-left:-23px;
+}
+
+#game_time span {
+  margin-left:5px;
+}
+
+.btn_text {
+  cursor: pointer;
+}
+
+.btn_text:hover {
+  color:#B0B0B0;
+}
+
+.btn_text.active {
+  color:#B0B0B0;
+}
