@@ -33,6 +33,18 @@ var settings = {
       });
       inp.classList.add('active');
     }
+  },
+  game_resolution:function(v){
+    var inp = document.querySelector('#resolution');
+
+    if(document.activeElement.id !== inp.id){
+      for(var x=0,len=inp.children.length;x<len;x++){
+        if(parseInt(inp.children[x].getAttribute('width'),10) == v.w && parseInt(inp.children[x].getAttribute('height'),10) == v.h){
+          inp.value = inp.children[x].value;
+          break;
+        }
+      }
+    }
   }
 };
 
@@ -93,7 +105,8 @@ function addSettings(win){
       timecycles = Array.prototype.slice.call(document.querySelectorAll('.time_cycle')),
       cycleReg = /(\d){1,4}/,
       playbtn = document.querySelector("#play"),
-      pausebtn = document.querySelector("#pause");
+      pausebtn = document.querySelector("#pause"),
+      resChoice = document.querySelector('#resolution');
   timeInput.onkeyup = function(){
     var val = this.value;
     if(val.match(timeReg)){
@@ -141,5 +154,10 @@ function addSettings(win){
     playbtn.classList.remove('active');
     this.classList.add('active');
     win.postMessage(JSON.stringify({time_play:false}),"*")
+  }
+
+  resChoice.onchange = function(){
+    var res = this.value;
+    win.postMessage(JSON.stringify({resolution:res}),"*");
   }
 }

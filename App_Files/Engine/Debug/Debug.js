@@ -88,6 +88,17 @@ module.exports = function(){
     return Debug;
   }
 
+  Debug.resolution = function(){
+    if(_debugging && _window){
+       var currRes = Engine.Renderer.resolution();
+
+      _window.window.postMessage(JSON.stringify({
+        game_resolution:currRes
+      }),"*");
+    }
+    return Debug;
+  }
+
   Debug.time = function(){
     if(_debugging && _window){
       var currentTime = new Date();
@@ -158,6 +169,11 @@ module.exports = function(){
         break;
         case 'time_play':
           Engine.Time.togglePause(!data[v]);
+        break;
+        case 'resolution':
+          Engine.Renderer.resolution(parseInt(data[v],10));
+          var res = Engine.Renderer.resolution();
+          Engine.Renderer.renderer().setSize(res.w,res.h);
         break;
       }
     });

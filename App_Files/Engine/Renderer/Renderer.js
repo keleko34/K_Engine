@@ -3,7 +3,7 @@ var path = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine/Renderer",
 
 module.exports = function(){
   var _resolution = {w:1920,h:1080},
-      _resolutionEnum = [{w:3840,h:2160},{w:2560,h:1440},{w:1920,h:1080},{w:1600,h:900},{w:1280,h:720}],
+      _resolutionEnum = [{w:3840,h:2160},{w:2560,h:1440},{w:1920,h:1080},{w:1600,h:900},{w:1280,h:720},{w:800,h:600}],
       _renderer = {},
       _renderElement = {},
       _renderContext = {},

@@ -73,7 +73,7 @@ module.exports = function(){
 
   Engine.debug = function(d){
     if(d === undefined && _Debug.debugging()){
-      _Debug.window(true).fps().position().meshes().system().time();
+      _Debug.window(true).fps().position().meshes().system().time().resolution();
       
     }
     else{
