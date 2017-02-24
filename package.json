@@ -41,7 +41,7 @@
     "three": "^0.84.0"
   },
   "scripts": {
-    "start": "node_modules\\nw\\nwjs\\nw .",
+    "start": "node_modules\\nw\\nwjs\\nw . --disable-devtools",
     "debug": "node_modules\\nw\\nwjs\\nw --enable-logging --remote-debugging-port=1729 . --load-extension=Extensions\\ShaderEditorExtensionold\\src"
   },
   "maintainers": [

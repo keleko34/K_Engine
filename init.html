@@ -21,7 +21,12 @@
     <script>
 
       var gui = window.require('nw.gui');
-      var win = gui.Window.get(window);
+      var win = gui.Window.get();
+
+      window.addEventListener('beforeunload', function() {
+        console.log(document.activeElement);
+        return "cant unload sorry";
+      }, false);
 
       /* REGION Globals */
       global.THREE = THREE;

@@ -13,6 +13,28 @@ module.exports = function(){
       _loading = false,
       _window;
 
+  function Restart()
+  {
+    var createdTabId = 0;
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        if(tabId == createdTabId && changeInfo.status == "loading") {
+            createdTabId = 0;
+
+            //tab.url contains redirected or direct url, send it to google tab
+            var tabUrl = tab.url;
+            chrome.tabs.getSelected(null, function(tab){
+                chrome.tabs.sendRequest(tab.id, {tabUrl: tabUrl});
+            });
+
+        }
+    });
+
+    chrome.tabs.create({"url":"http://cricinfo.com","selected":false},function(tab){
+        createdTabId = tab.id;
+    });
+    console.log(chrome.tabs);
+  }
+
   function Debug(){
     Engine.Input
     .removeEnvironmentListener(Debug.environment)
@@ -174,6 +196,13 @@ module.exports = function(){
           Engine.Renderer.resolution(parseInt(data[v],10));
           var res = Engine.Renderer.resolution();
           Engine.Renderer.renderer().setSize(res.w,res.h);
+        break;
+        case 'method':
+            switch(data.method){
+              case 'reload':
+                Restart();
+              break;
+            }
         break;
       }
     });

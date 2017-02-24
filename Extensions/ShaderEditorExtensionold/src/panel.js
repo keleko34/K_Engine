@@ -675,13 +675,20 @@ logMsg( 'starting' );
 	} );
 
 } );*/
-
-button.addEventListener( 'click', function( e ) {
-	chrome.devtools.inspectedWindow.reload( {
+function reload()
+{
+    chrome.devtools.inspectedWindow.reload( {
 		ignoreCache: true,
     	injectedScript: '(' + f.toString() + ')()'
 	} );
-} );
+    chrome.devtools.network.onNavigated = function(e)
+    {
+        console.log("refreshed");
+    }
+}
+
+if(document.getElementById('info').style.display !== 'none') reload();
+button.addEventListener( 'click', reload);
 
 var backgroundPageConnection = chrome.runtime.connect({
 	name: 'panel'
