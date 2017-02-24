@@ -40,7 +40,9 @@ module.exports = function(){
     _Scene.addHighPoly(_test.mesh())
     .addHighPoly(_test.floor())
     .addLowPoly(_SkyBox.sky())
-    .addLowPoly(_SkyBox.sunMesh());
+    .addLowPoly(_SkyBox.sunMesh())
+    .addLowPoly(_SkyBox.skyNight())
+    .addLowPoly(_SkyBox.starMesh());
     
     _test.walls().forEach(function(v){
       _Scene.addHighPoly(v);
@@ -92,6 +94,7 @@ module.exports = function(){
     _Scene.call();
 
     _SkyBox.sun().updateTime(_Time.rotation());
+    _SkyBox.stars().updateTime(_Time.rotation())
     return Engine;
   }
 

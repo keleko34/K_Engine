@@ -7,14 +7,25 @@ module.exports = function(){
       _fragment = CreateFragment(),
       _shader = {},
       _uniforms = {},
+      _baseUniforms = {
+        iGlobalTime:{type:'f',value: 0.1}
+      },
       _loadeduniforms = {},
-      _side = THREE.FrontSide
+      _side = THREE.FrontSide,
+      _clock = THREE.Clock;
+  console.log(_clock.elapsedTime,_clock());
+  _clock();
 
   function Shader(){
     _vertex.call();
     _fragment.call();
     
+    Object.keys(_baseUniforms).forEach(function(v){
+      if(_uniforms[v] === undefined) _uniforms[v] = _baseUniforms[v];
+    });
+
     _loadeduniforms = THREE.UniformsUtils.clone(_uniforms);
+
     Object.keys(_loadeduniforms).forEach(function(v){
       _loadeduniforms[v].value = _uniforms[v];
     });
@@ -23,7 +34,9 @@ module.exports = function(){
       vertexShader : _vertex.rules(),
       fragmentShader : _fragment.rules(),
       uniforms : _loadeduniforms,
-      side : _side
+      side : _side,
+      blending : THREE.NormalBlending,
+      transparent : true
     });
   }
 
@@ -43,6 +56,12 @@ module.exports = function(){
   
   Shader.clearUniforms = function(){
     _uniforms = {};
+    return Shader;
+  }
+
+  Shader.updateUniforms = function()
+  {
+    Shader.Uniform('iGlobalTime',_clock.elapsedTime);
     return Shader;
   }
 
