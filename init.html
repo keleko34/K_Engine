@@ -18,9 +18,11 @@
     <div id="time"></div>
     <canvas id="viewport"></canvas>
     <script src="App_Files/Assets/js/three.js"></script>
+    <script src="App_Files/Window/Controls/Controls.js"></script>
+    <script src="App_Files/Window/Window.js"></script>
     <script>
 
-      var gui = require('nw.gui');
+      var gui = window.require('nw.gui');
       var win = gui.Window.get();
 
       /* REGION Globals */
@@ -39,12 +41,12 @@
         date : document.getElementById('date'),
         gui : gui
       };
-      window.Win = global.Win = require('./App_Files/Window/Window').call();
-      window.Engine = global.Engine = require('./App_Files/Engine/Engine').call();
+      window.Win = global.Win = CreateWindow(win);
+      window.Engine = global.Engine = window.require('./App_Files/Engine/Engine').call();
       
       /* ENDREGION Globals */
 
-      Win.call();
+      window.Win.call();
       Engine.call();
     
       win.window.addEventListener('message',function(msg){
@@ -62,8 +64,6 @@
         cancelAnimationFrame(timer);
       }
     }
-
-    window
 
     timer = requestAnimationFrame(Main);
     </script>

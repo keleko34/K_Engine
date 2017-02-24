@@ -8,7 +8,7 @@ module.exports = function(){
     _shaderRules = [
         "varying vec3 vWorldPosition;",
         "varying vec3 vPosition;",
-        "varying vec3 vColor;",
+        //"varying vec3 vColor;",
 		"void main() {",
 		"}"
     ];

@@ -1,9 +1,6 @@
-var path = process.cwd().replace(/\\/,"/")+"/App_Files/Window",
-    CreateControls = require(path+"/Controls/Controls");
+function CreateWindow(win){
 
-module.exports = function(){
-
-var _Window = WindowElements.gui.Window.get(),
+var _Window = win,
     _Controls = CreateControls(),
     _keyCommands = function(e){
       if(e.keyCode === 122){
@@ -11,14 +8,15 @@ var _Window = WindowElements.gui.Window.get(),
         e.stopImmediatePropagation();
         _Controls.toggleMaximize();
       }
-    }
+    },
+    _height = _Window.height,
+    _width = _Window.width;
 
   function Window(){
 
-    WindowElements.document.removeEventListener('keyup',_keyCommands);
+    document.removeEventListener('keyup',_keyCommands);
 
-    WindowElements.document.addEventListener('keyup',_keyCommands);
-
+    document.addEventListener('keyup',_keyCommands);
     _Controls.Window(_Window).call();
   }
 
@@ -28,6 +26,18 @@ var _Window = WindowElements.gui.Window.get(),
 
   Window.Controls = function(){
     return _Controls;
+  }
+
+  Window.height = function(v){
+    if(v === undefined) return _height;
+    _height = v;
+    return Window;
+  }
+
+  Window.width = function(v){
+    if(v === undefined) return _width;
+    _width = v;
+    return Window;
   }
 
   return Window;

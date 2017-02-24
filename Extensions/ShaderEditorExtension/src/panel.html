@@ -1,0 +1,129 @@
+<html>
+<head>
+<link href="./codemirror/CodeMirror.css" rel="stylesheet">
+<script src="./codemirror/CodeMirror.js"></script>
+<script src="./codemirror/glsl.js"></script>
+<script src="./codemirror/autoformat.js"></script>
+<script src="./codemirror/dialog.js"></script>
+<link href="./codemirror/dialog.css" rel="stylesheet">
+<script src="./codemirror/searchcursor.js"></script>
+<script src="./codemirror/search.js"></script>
+<script src="./glsl-optimizer.min.js"></script>
+<style>
+*{ box-sizing: border-box; margin: 0; padding: 0; font-size: 12px;}
+body{ background-color: #eee; -webkit-user-select: none; cursor: default; }
+ul{ list-style-type: none; }
+#reload{ padding: 10px; cursor: pointer;}
+#container{ position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: none; }
+#list{ position: absolute; left: 0; width: 200px; top: 0; bottom: 25px; listy-style-type: none; background-color: #eee; overflow: auto; }
+#list li { padding: 5px 10px; border-bottom: 1px solid #e5e5e5; cursor: pointer; position: relative; height: 30px; }
+#list li:hover{ background-color: rgba(56, 121, 217, 0.1); }
+#list li.active{ background-color: rgb(56, 121, 217); color: white;}
+#list li span.visibility{ background-image: url(assets/check.svg); background-size: contain; width: 15px; height: 15px; display: block; position: absolute; left: 10px; top: 5px; bottom: 5px;}
+#list li span.name{ position: absolute; left: 35px; top: 5px; right: 10px; bottom: 5px;}
+#list li.hidden{ opacity: .25;}
+#editorContainer{ position: absolute; left: 200px; right: 0; top: 0; bottom: 0; background-color: #eee;}
+#vs-panel, #fs-panel{ transition: background-color 150ms ease-out }
+#vs-panel{ position: absolute; left: 0; right: 50%; top: 0; bottom: 0; height: 100%; width: 50%; }
+#fs-panel{ position: absolute; left: 50%; right: 0; top: 0; bottom: 0; height: 100%; width: 50%; }
+#vs-panel.fullscreen, #fs-panel.fullscreen{ left: 0; right: 0; width: 100%; z-index: 100; }
+#vsEditor{ position: absolute; left: 0; right: 0; top: 0; bottom: 25px; height: calc( 100% - 25px ); width: 100%; }
+#fsEditor{ position: absolute; left: 0; right: 0; top: 0; bottom: 25px; height: calc( 100% - 25px ); width: 100%; }
+.footer{ position: absolute; left: 0; bottom: 0; height: 25px; right: 0; border-left: 1px solid #a6a6a6; }
+.footer p{ position: absolute;left: 0; top: 0; bottom: 0; right: 45px; overflow: hidden; padding: 3px 5px; white-space: nowrap; text-overflow: ellipsis; }
+.errorMessage{ background-color: #b60000; color: white; padding: 5px;}
+.warningMessage{ background-color: #ff8a00; color: white; padding: 5px;}
+#waiting{ display: none; color: #404040; text-align: center; justify-content: center; align-items: center; height: 100%; }
+#info{ color: #404040; text-align: center; display: flex; justify-content: center; align-items: center; height: 100%; }
+#info h1{ margin-bottom: 1em;}
+#info p{ margin-bottom: 1em; line-height: 1.4em}
+#info button{ margin-bottom: 1em;}
+#info a{ color: #4c9ed9; }
+#info a:hover{ color: #202020;}
+.go-fullscreen{ background-image: url(assets/fs.svg); width: 15px; height: 15px; display: block; position: absolute; top: 5px; right: 5px; background-size: 15px 15px; cursor: pointer; }
+.fullscreen .go-fullscreen{ background-image: url(assets/fs_exit.svg); }
+.go-format{ background-image: url(assets/format.svg); width: 15px; height: 15px; display: block; position: absolute; top: 5px; right: 45px; background-size: 15px 15px; cursor: pointer; }
+.go-optimise{ background-image: url(assets/star.svg); width: 15px; height: 15px; display: block; position: absolute; top: 5px; right: 25px; background-size: 15px 15px; cursor: pointer; }
+.hide{ display: none;}
+.CodeMirror{ border: 1px solid #a6a6a6; border-right: 1px solid transparent; border-top: 1px solid transparent; }
+.CodeMirror-focused{ border: 1px solid #4c9ed9; border-right: 1px solid #4c9ed9; border-top: 1px solid #4c9ed9; }
+#log{ position: absolute;left: 50%; top:0;right: 0; bottom: 0; overflow: auto; display: none;}
+.compiled{ background-color: #2fb600; color: white;}
+.not-compiled{ background-color: #b60000; color: white;}
+#settingsPanel{ position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: white; padding: 30px; display: none;}
+#settingsPanel h1{ margin-bottom: 10px;}
+#settingsPanel input[type="checkbox"]{ margin-right: 5px;}
+#toolbarContainer{ position: absolute; left: 0; bottom: 0; height: 25px; width: 200px; background-color: #eee; }
+#toolbarContainer li{ width: 25px; height: 25px; float: left; }
+#toolbarContainer a{ width: 21px; height: 21px; margin: 2px; display: block; background-repeat: no-repeat; background-position: 50% 50%; background-size: contain;}
+#settingsButton{ background-image: url(assets/gears.svg); }
+#highlightButton{ background-image: url(assets/eye.svg); }
+.vertical #vs-panel{ left: 0; right: 0; top: 0; bottom: auto; width: 100%; height: 50%; }
+.vertical #fs-panel{ left: 0; right: 0; bottom: 0; height: 50%; top: auto; width: 100%; }
+#textures{ position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 100; background-color: #eee; overflow: auto;}
+#textures .textureElement{ width: 128px; height: 128px; margin: 10px 0 0 10px; float: left; position: relative; border: 1px solid black;}
+#textures img{ width: 128px; height: 128px; position: absolute; left: 0; top: 0 ;}
+#textures .dropzone, #textures input[type=file]{ position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: 100%; height: 100%; }
+#tabs{ position: absolute; left: 0; top: 0; right: 0; height: 30px; background-color: #eee; border-bottom: 1px solid #a6a6a6; }
+#tab-container{ position: absolute; left: 0; top: 30px; right: 0; bottom: 0;}
+#tabs li{ float: left; height: 30px; padding: 0 20px; line-height: 30px; cursor: pointer; border: none; border-bottom: 1px solid #a6a6a6; border-top-right-radius: 5px; border-top-left-radius: 5px }
+#tabs li.active{ font-weight: bold; border: 1px solid #a6a6a6; border-bottom: 1px solid #eee; }
+.tab{ display: none; position: absolute; left: 0; top: 0; right: 0; width: 100%; height: 100%;}
+.tab.active{ display: block; }
+.tab-content{ padding: 20px; line-height: 1.4em;}
+.tab-content h1{ margin-bottom: 1em;}
+.tab-content label{ margin-left: .5em;}
+#textures{ display: none }
+</style>
+</head>
+<body>
+<div id="info"><div>
+	<p>Welcome!</p>
+	<h1>WebGL GLSL shader editor extension<br/>v1.0.17 (beta)</h1>
+	<p>To start tracking the WebGL context,<br/>the extension needs to reload the page.</p>
+	<button id="reload" >Reload</button>
+	<p>Bugs, ideas and feedback: <a rel="external" href="https://github.com/spite/ShaderEditorExtension">GitHub page</a><br/><a rel="external" href="https://twitter.com/thespite" >@thespite</a> | <a rel="external" href="http://www.clicktorelease.com" >www.clicktorelease.com</a></p>
+</div></div>
+<div id="waiting" >
+	<p>Waiting for programs to be added...</p>
+</div>
+<div id="log" ></div>
+<div id="container" >
+	<ul id="tabs">
+		<li data-tab="shaders" class="active">Shaders</li>
+		<li data-tab="textures">Textures</li>
+		<li data-tab="settings">Settings</li>
+	</ul>
+	<div id="tab-container">
+		<div class="active tab" id="shaders-tab">>
+			<ul id="list"></ul>
+			<ul id="toolbarContainer" >
+				<li><a href="#" id="highlightButton"></a></li>
+			</ul>
+			<div id="editorContainer">
+				<div id="vs-panel">
+					<div id="vs-footer" class="footer" ><p>Vertex Shader | <span id="vs-count" ></span></p> <a id="vs-format" title="Pretty print" class="go-format" ></a> <a id="vs-optimise" title="Optimise" class="go-optimise" ></a> <a id="vs-fullscreen" title="Go fullscreen" class="go-fullscreen" ></a></div>
+				</div>
+				<div id="fs-panel">
+					<div id="fs-footer" class="footer" ><p>Fragment Shader | <span id="fs-count" ></span></p> <a id="fs-format" title="Pretty print" class="go-format" ></a> <a id="fs-optimise" title="Optimise" class="go-optimise" ></a> <a id="fs-fullscreen" title="Go fullscreen" class="go-fullscreen" ></a></div>
+				</div>
+			</div>
+		</div>
+		<div class="tab" id="textures-tab" >
+			<div class="tab-content" id="textures-disabled">
+				<p>Texture monitoring is disabled. If you want to use this feature, go to Settings and enable the "monitor textures" option and reload the page.</p>
+			</div>
+			<ul id="textures" ></ul>
+		</div>
+		<div class="tab" id="settings-tab" >
+			<div class="tab-content" >
+				<h1>Settings</h1>
+				<p><input type="checkbox" id="highlightShaders" value="highlightShaders"></input><label for="highlightShaders" >Highlight shaders</label></p>
+				<p><input type="checkbox" id="monitorTextures" value="monitorTextures"></input><label for="monitorTextures" >Monitor textures</label></p>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="panel.js"></script>
+</body>
+</html>

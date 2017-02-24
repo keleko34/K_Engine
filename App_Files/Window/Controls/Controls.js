@@ -1,4 +1,4 @@
-module.exports = function(){
+function CreateControls(){
   var _Window = {},
       _maximized = false,
       _minimized = false,
@@ -56,7 +56,7 @@ module.exports = function(){
       }
     });
 
-    WindowElements.Controls.close.onclick = function(e){
+    document.getElementById('close').onclick = function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
       for(var x=0;x<_onClose.length;x++){
@@ -65,19 +65,19 @@ module.exports = function(){
       _Window.close(true);
     }
 
-    WindowElements.Controls.maximize.onclick = function(e){
+    document.getElementById('maximize').onclick = function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
       Controls.toggleMaximize();
     }
 
-    WindowElements.Controls.minimize.onclick = function(e){
+    document.getElementById('minimize').onclick = function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
       Controls.toggleMinimize();
     }
 
-    WindowElements.Controls.topbar.ondblclick = function(e){
+    document.getElementById('topbar').ondblclick = function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
       Controls.toggleMaximize();

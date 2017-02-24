@@ -125,12 +125,6 @@ module.exports = function(){
 			"vec3 Lin = pow(abs(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * (1.0 - Fex)),vec3(1.5));",
 			"Lin *= mix(vec3(1.0),pow(abs(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * Fex),vec3(1.0/2.0)),clamp(pow(abs(1.0-dot(up, sunDirection)),5.0),0.0,1.0));",
 
-			//nightsky
-			"vec3 direction = normalize(vWorldPosition - cameraPos);",
-			"float theta = acos(direction.y);", // elevation --> y-axis, [-pi/2, pi/2]
-			"float phi = atan(direction.z, direction.x);", // azimuth --> x-axis [-pi/2, pi/2]",
-			"vec2 uv = vec2(phi, theta) / vec2(2.0*pi, pi) + vec2(0.5, 0.0);",
-
 			"vec3 L0 = vec3(0.1) * Fex;",
 
 			"float sundisk = smoothstep(sunAngularDiameterCos,sunAngularDiameterCos+0.00002,cosTheta);",
