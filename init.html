@@ -18,12 +18,10 @@
     <div id="time"></div>
     <canvas id="viewport"></canvas>
     <script src="App_Files/Assets/js/three.js"></script>
-    <script src="App_Files/Window/Controls/Controls.js"></script>
-    <script src="App_Files/Window/Window.js"></script>
     <script>
 
       var gui = window.require('nw.gui');
-      var win = gui.Window.get();
+      var win = gui.Window.get(window);
 
       /* REGION Globals */
       global.THREE = THREE;
@@ -41,15 +39,16 @@
         date : document.getElementById('date'),
         gui : gui
       };
-      window.Win = global.Win = CreateWindow(win);
+      window.Win = global.Win = window.require('./App_Files/Window/Window').call();
       window.Engine = global.Engine = window.require('./App_Files/Engine/Engine').call();
       
       /* ENDREGION Globals */
 
-      window.Win.call();
+      Win.call();
       Engine.call();
     
       win.window.addEventListener('message',function(msg){
+        if(msg.data && msg.data.source === "WebGLShaderEditor") return;
         Engine.Debugger.filterMessages(JSON.parse(msg.data));
       },false);
 

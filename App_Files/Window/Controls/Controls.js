@@ -1,4 +1,4 @@
-function CreateControls(){
+module.exports = function(){
   var _Window = {},
       _maximized = false,
       _minimized = false,
@@ -56,7 +56,7 @@ function CreateControls(){
       }
     });
 
-    document.getElementById('close').onclick = function(e){
+    WindowElements.Controls.close.onclick = function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
       for(var x=0;x<_onClose.length;x++){
@@ -65,19 +65,19 @@ function CreateControls(){
       _Window.close(true);
     }
 
-    document.getElementById('maximize').onclick = function(e){
+    WindowElements.Controls.maximize.onclick = function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
       Controls.toggleMaximize();
     }
 
-    document.getElementById('minimize').onclick = function(e){
+    WindowElements.Controls.minimize.onclick = function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
       Controls.toggleMinimize();
     }
 
-    document.getElementById('topbar').ondblclick = function(e){
+    WindowElements.Controls.topbar.ondblclick = function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
       Controls.toggleMaximize();

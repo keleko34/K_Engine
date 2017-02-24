@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "node_modules\\nw\\nwjs\\nw .",
-    "debug": "node_modules\\nw\\nwjs\\nw --enable-logging --remote-debugging-port=1729 . --load-extension=Extensions\\ShaderEditorExtension\\src"
+    "debug": "node_modules\\nw\\nwjs\\nw --enable-logging --remote-debugging-port=1729 . --load-extension=Extensions\\ShaderEditorExtensionold\\src"
   },
   "maintainers": [
     {

@@ -31,7 +31,7 @@ module.exports = function(){
   function ViewPort(){
     WindowElements.document.removeEventListener('pointerlockchange',_pointerLockEvent);
     WindowElements.document.addEventListener('pointerlockchange',_pointerLockEvent);
-    ViewPort.resize(Win.width(),Win.height());
+    ViewPort.resize(Win.get().width,Win.get().height);
     ViewPort.togglePointerLock(true);
     Engine.Input
     .replaceBinding("Toggle PointerLock","dblclick","left",_pointerLockOn)
@@ -46,8 +46,6 @@ module.exports = function(){
     _height = h;
     _ViewPort.setAttribute('height',h);
     _ViewPort.setAttribute('width',w);
-    Win.width(w);
-    Win.height(w);
   }
 
   ViewPort.view = function(){
