@@ -118,7 +118,7 @@ module.exports = function(){
         //console.log("phi ",phi,Math.sin(phi),"theta ",theta,Math.sin(theta),_starMesh.position.x,_starMesh.position.y,_starMesh.position.z);
         _Shader.loadedUniforms().skyPosition.value.copy(_starMesh.position);
         _Shader.Uniform('skyPosition',_starMesh.position);
-      console.log((_starMesh.position.y/450000.0) < -0.01 ? Math.min(Math.max((-1.0*((_starMesh.position.y/450000.0)*100)), 0.0), 1.0) : (_starMesh.position.y/450000.0) < -0.01 ? 1.0 : 0.0);
+      console.log(_Shader.loadedUniforms().position,_Shader.loadedUniforms().modelMatrix)
     }
 
     return Stars;
