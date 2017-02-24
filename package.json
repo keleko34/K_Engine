@@ -38,7 +38,7 @@
     "nw": "0.20.3-sdk"
   },
   "devDependencies": {
-    "three": "^0.77.1"
+    "three": "^0.84.0"
   },
   "scripts": {
     "start": "node_modules\\nw\\nwjs\\nw .",

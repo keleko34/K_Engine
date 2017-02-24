@@ -12,9 +12,7 @@ module.exports = function(){
       },
       _loadeduniforms = {},
       _side = THREE.FrontSide,
-      _clock = THREE.Clock;
-  console.log(_clock.elapsedTime,_clock());
-  _clock();
+      _clock = new THREE.Clock();
 
   function Shader(){
     _vertex.call();
