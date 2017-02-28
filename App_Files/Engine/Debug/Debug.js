@@ -15,24 +15,7 @@ module.exports = function(){
 
   function Restart()
   {
-    var createdTabId = 0;
-    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-        if(tabId == createdTabId && changeInfo.status == "loading") {
-            createdTabId = 0;
 
-            //tab.url contains redirected or direct url, send it to google tab
-            var tabUrl = tab.url;
-            chrome.tabs.getSelected(null, function(tab){
-                chrome.tabs.sendRequest(tab.id, {tabUrl: tabUrl});
-            });
-
-        }
-    });
-
-    chrome.tabs.create({"url":"http://cricinfo.com","selected":false},function(tab){
-        createdTabId = tab.id;
-    });
-    console.log(chrome.tabs);
   }
 
   function Debug(){
@@ -182,6 +165,7 @@ module.exports = function(){
       switch(v){
         case 'time_engine':
           Engine.Time.setTime.apply({},data[v].split(":").map(function(v){return parseInt(v);}));
+          global.WindowElements.time.innerHTML = Engine.Time.getStandardTime(true,true,false);
         break;
         case 'time_daycycle':
           Engine.Time.setDayRateInMinutes(data[v]);

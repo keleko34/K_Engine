@@ -1,4 +1,5 @@
 var localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine",
+    InsertMath = require(process.cwd().replace(/\\/g,"/")+"/App_Files/Assets/js"+"/math"),
     CreateDebug = require(localPath+"/Debug/Debug"),
     CreateInput = require(localPath+"/Input/Input"),
     CreateCamera = require(localPath+"/Camera/Camera"),
@@ -7,16 +8,21 @@ var localPath = process.cwd().replace(/\\/g,"/")+"/App_Files/Engine",
     CreateTime = require(localPath+"/Time/Time"),
     CreateShader = require(localPath+"/Shaders/Shaders"),
     CreateSkyBox = require(localPath+"/SkyBox/SkyBox"),
+    CreateConfig = require(localPath+"/Config/Config"),
     CreateTest = require(localPath+"/test");
 
+
 module.exports = function(){
-  var _Renderer = CreateRenderer(),
+  var _Config = CreateConfig(),
+      _Renderer = CreateRenderer(),
       _Input = CreateInput(),
       _isRunning = true,
       _Debug = CreateDebug(),
       _Camera = CreateCamera(),
       _Scene = CreateScene(),
-      _Time = CreateTime(),
+      _Time = CreateTime()
+      .setTime.apply({},_Config.get('timedate').time.split(':').map(function(n){return parseInt(n);}))
+      .setDate(_Config.get('timedate').year,_Config.get('timedate').month,_Config.get('timedate').day,_Config.get('timedate').weekday),
       _SkyBox = CreateSkyBox(),
       _resolution = {w:1920,h:1080},
       _test = CreateTest(),
@@ -27,7 +33,11 @@ module.exports = function(){
   function Engine(){
     _Input.call();
     _Debug.call();
-    _Camera.width(_resolution.w).height(_resolution.h).call();
+    _Camera.width(_resolution.w)
+    .height(_resolution.h)
+    .degrees(_Config.get('rotation').degreesX,_Config.get('rotation').degreesY)
+    .position(_Config.get('position').x,_Config.get('position').y,_Config.get('position').z)
+    .call();
 
     _Scene.scene().add(_Camera.perspectiveCamera());
 
@@ -60,6 +70,7 @@ module.exports = function(){
   Engine.Time = _Time;
   Engine.CreateShader = CreateShader;
   Engine.Skybox = _SkyBox;
+  Engine.Config = _Config;
 
   Engine.isRunning = function(v){
     if(v === undefined){

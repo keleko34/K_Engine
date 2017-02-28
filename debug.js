@@ -1,19 +1,21 @@
+var inEdit = false;
+
 var settings = {
   time_engine:function(v){
-    if(document.activeElement.id !== 'date_time_input'){
+    if(document.activeElement.id !== 'date_time_input' && !inEdit){
       var inp = document.querySelector('#date_time_input');
       if(inp) inp.value = v;
     }
   },
   time_daycycle:function(v){
-    if(document.activeElement.id !== 'date_daycycle_input'){
+    if(document.activeElement.id !== 'date_daycycle_input' && !inEdit){
       var inp = document.querySelector('#date_daycycle_input');
       v = v.toString();
       if(inp) inp.value = (v.length < 4 ? (new Array((5-v.length)).join("0")+v) : v);
     }
   },
   time_nightcycle:function(v){
-    if(document.activeElement.id !== 'date_nightcycle_input'){
+    if(document.activeElement.id !== 'date_nightcycle_input' && !inEdit){
       var inp = document.querySelector('#date_nightcycle_input');
       v = v.toString();
       if(inp) inp.value = (v.length < 4 ? (new Array((5-v.length)).join("0")+v) : v);
@@ -101,36 +103,58 @@ function addNav(){
 
 function addSettings(win){
   var timeInput = document.querySelector('#date_time_input'),
-      timeReg = /(\d){2}:(\d){2}:(\d){2}/,
+      timeReg = /(\d){1,2}:(\d){1,2}:(\d){1,2}/,
       timecycles = Array.prototype.slice.call(document.querySelectorAll('.time_cycle')),
       cycleReg = /(\d){1,4}/,
       playbtn = document.querySelector("#play"),
       pausebtn = document.querySelector("#pause"),
-      resChoice = document.querySelector('#resolution');
+      resChoice = document.querySelector('#resolution'),
+      isPaused = (playbtn.className.indexOf('active') !== -1);
+  timeInput.onfocus = function(){
+    inEdit = true;
+    isPaused = (playbtn.className.indexOf('active') !== -1);
+    win.postMessage(JSON.stringify({time_play:false}),"*");
+  }
+  timeInput.onblur = function(){
+    timeInput.onkeyup();
+    win.postMessage(JSON.stringify({time_play:true}),"*");
+    inEdit = false;
+  }
+
   timeInput.onkeyup = function(){
     var val = this.value;
     if(val.match(timeReg)){
-      var vals = val.split(':').map(function(v){return parseInt(v);}),
+      var vals = val.split(':'),
+          valsInt = vals.map(function(v){return parseInt(v);}),
           legal = true;
 
-      if(vals[0] < 0 || vals[0] > 23){
+      if(valsInt[0] < 0 || valsInt[0] > 23){
         legal = false;
       }
-      else if(vals[1] < 0 || vals[1] > 59){
+      else if(valsInt[1] < 0 || valsInt[1] > 59){
         legal = false;
       }
-      else if(vals[2] < 0 || vals[2] > 59){
+      else if(valsInt[2] < 0 || valsInt[2] > 59){
         legal = false;
       }
+
       if(legal){
         win.postMessage(JSON.stringify({
-          time_engine:val
+          time_engine:vals.map(function(n){
+            return (n.length === 1 ? "0"+n : n);
+          }).join(":")
         }),"*");
       }
     }
   }
 
   timecycles.forEach(function(cycle){
+    cycle.onfocus = function(){
+      inEdit = true;
+    }
+    cycle.onblur = function(){
+      inEdit = false;
+    }
     cycle.onkeyup = function(e){
       var val = this.value;
       if(val.match(cycleReg)){
@@ -147,12 +171,14 @@ function addSettings(win){
   playbtn.onclick = function(){
     pausebtn.classList.remove('active');
     this.classList.add('active');
+    isPaused = false;
     win.postMessage(JSON.stringify({time_play:true}),"*")
   }
 
   pausebtn.onclick = function(){
     playbtn.classList.remove('active');
     this.classList.add('active');
+    isPaused = true;
     win.postMessage(JSON.stringify({time_play:false}),"*")
   }
 

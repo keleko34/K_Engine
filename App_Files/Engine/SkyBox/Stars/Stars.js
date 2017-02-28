@@ -20,9 +20,16 @@ module.exports = function(){
         .fragment().injectVars([
             "uniform vec3 skyPosition;",
 
-            "const float pi = 3.141592653589793238462643383279502884197169;",
+          "float Hash( float n ){",
+            "return fract( (1.0 + sin(n)) * 415.92653);",
+          "}",
+          "float Noise3d( vec3 x ){",
+              "float xhash = Hash(floor(400.0 * x.x) * 37.0);",
+              "float yhash = Hash(floor(400.0*x.y) * 57.0);",
+              "float zhash = Hash(floor(400.0*x.z) * 67.0);",
+              "return fract(xhash + yhash + zhash);",
+          "}",
 
-            "varying vec2 vUv;",
           // Return random noise in the range [0.0, 1.0], as a function of x.
             "float Noise2d( in vec2 x )",
             "{",
@@ -31,9 +38,9 @@ module.exports = function(){
                 "return fract( 415.92653 * ( xhash + yhash ) );",
             "}",
           // Convert Noise2d() into a "star field" by stomping everthing below fThreshhold to zero.
-            "float NoisyStarField( in vec2 vSamplePos, float fThreshhold )",
+            "float NoisyStarField( in vec3 vSamplePos, float fThreshhold )",
             "{",
-                "float StarVal = Noise2d( vSamplePos );",
+                "float StarVal = Noise3d( vSamplePos );",
                 "if ( StarVal >= fThreshhold )",
                     "StarVal = pow( (StarVal - fThreshhold)/(1.0 - fThreshhold), 6.0 );",
                 "else",
@@ -41,7 +48,7 @@ module.exports = function(){
                 "return StarVal;",
             "}",
           // Stabilize NoisyStarField() by only sampling at integer values.
-            "float StableStarField( in vec2 vSamplePos, float fThreshhold )",
+            "float StableStarField( in vec3 vSamplePos, float fThreshhold )",
             "{",
 
             // Linear interpolation between four samples.
@@ -49,11 +56,11 @@ module.exports = function(){
             // There must be a better way to "anti alias" the star field.
                 "float fractX = fract( vSamplePos.x );",
                 "float fractY = fract( vSamplePos.y );",
-                "vec2 floorSample = vSamplePos;",
+                "vec3 floorSample = vSamplePos;",
                 "float v1 = NoisyStarField( floorSample, fThreshhold );",
-                "float v2 = NoisyStarField( floorSample + vec2( 0.0, 1.0 ), fThreshhold );",
-                "float v3 = NoisyStarField( floorSample + vec2( 1.0, 0.0 ), fThreshhold );",
-                "float v4 = NoisyStarField( floorSample + vec2( 1.0, 1.0 ), fThreshhold );",
+                "float v2 = NoisyStarField( floorSample + vec3( 0.0, 1.0, 0.0 ), fThreshhold );",
+                "float v3 = NoisyStarField( floorSample + vec3( 1.0, 0.0, 0.0 ), fThreshhold );",
+                "float v4 = NoisyStarField( floorSample + vec3( 1.0, 1.0, 0.0 ), fThreshhold );",
 
                 "float StarVal =   v1 * ( 1.0 - fractX ) * ( 1.0 - fractY )",
                                 "+ v2 * ( 1.0 - fractX ) * fractY",
@@ -66,17 +73,32 @@ module.exports = function(){
         _Shader.fragment().injectRules([
             // Sky Background Color
             "vec3 vColor = vec3( 0.0, 0.0, 0.1) * 0.4 / vUv.y;",
-
+            "vec3 sun_norm = normalize(skyPosition);",
             // Note: Choose fThreshhold in the range [0.99, 0.9999]
             // Higher values (i.e., closer to one) yield a sparser starfield
             "float StarFieldThreshhold = 0.994;",
 
-            "float xRate = -0.001;",
-            "float yRate = -0.001;",
-            "vec2 vSamplePos = gl_FragCoord.xy + vec2(xRate * vWorldPosition.x, yRate * vWorldPosition.y);",
-            "float StarVal = StableStarField( vSamplePos, StarFieldThreshhold );",
             "float nightAlpha = ((skyPosition.y/450000.0) < 0.01 ? clamp((-1.0*((skyPosition.y/450000.0)*100.0)), 0.0, 1.0) : (skyPosition.y/450000.0 < 0.01 ? 1.0 : 0.0));",
-            "vColor += vec3( StarVal );",
+
+            "if(sun_norm.y<0.1){//Night or dawn",
+                "float threshold = 0.99;",
+                //We generate a random value between 0 and 1
+                "float star_intensity = Noise3d(normalize(skyPosition));",
+                //And we apply a threshold to keep only the brightest areas
+                "if (star_intensity >= threshold){",
+                    //We compute the star intensity
+                    "star_intensity = pow((star_intensity - threshold)/(1.0 - threshold), 6.0)*(-sun_norm.y+0.1);",
+                    "vColor += vec3(star_intensity);",
+                "}",
+            "}",
+
+
+            //"float xRate = -0.001;",
+            //"float yRate = -0.001;",
+            //"vec3 vSamplePos = gl_FragCoord.xyz + vec3(xRate * vWorldPosition.x, yRate * vWorldPosition.y,vWorldPosition.z);",
+            //"float StarVal = StableStarField( vSamplePos, StarFieldThreshhold );",
+            //"float nightAlpha = ((skyPosition.y/450000.0) < 0.01 ? clamp((-1.0*((skyPosition.y/450000.0)*100.0)), 0.0, 1.0) : (skyPosition.y/450000.0 < 0.01 ? 1.0 : 0.0));",
+            //"vColor += vec3( StarVal );",
             "gl_FragColor.rgb = vColor;",
             "gl_FragColor.a = nightAlpha;"
         ]);
@@ -108,6 +130,7 @@ module.exports = function(){
     }
 
     Stars.updateTime = function(v){
+        //console.log(v);
         _azimuth = v;
         var theta = Math.PI * ( -1.0 - 0.5 );
         var phi = 2 * Math.PI * ( _azimuth - 0.5 );
@@ -118,7 +141,6 @@ module.exports = function(){
         //console.log("phi ",phi,Math.sin(phi),"theta ",theta,Math.sin(theta),_starMesh.position.x,_starMesh.position.y,_starMesh.position.z);
         _Shader.loadedUniforms().skyPosition.value.copy(_starMesh.position);
         _Shader.Uniform('skyPosition',_starMesh.position);
-      console.log(_Shader.loadedUniforms().position,_Shader.loadedUniforms().modelMatrix)
     }
 
     return Stars;

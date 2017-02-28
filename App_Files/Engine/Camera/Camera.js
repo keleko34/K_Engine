@@ -6,15 +6,19 @@ module.exports = function(){
       _width = 0,
       _height = 0,
       _lookXSpeed = 6,
-      _lookYSpeed = 6,
+      _lookYSpeed = 8,
       _moveSpeed = 4,
       _forwardMultiplier = 0,
-      _lon = 90,
-      _lat = 180;
+      _posX = 0,
+      _posY = 100,
+      _posZ = 2000,
+      //degrees in relation to camera angle
+      _degreesY = 0,
+      _degreesX = 90;
 
   function Camera(){
     _camera = new THREE.PerspectiveCamera( 60, (_width / _height), 100, 2000000 );
-    _camera.position.set( 0, 100, 2000 );
+    _camera.position.set( _posX, _posY, _posZ );
     _camera.rotation.set( 0, 0, 0 );
 
     Engine.Input.addEnvironment('freemode')
@@ -29,6 +33,8 @@ module.exports = function(){
     .replaceBinding("freemode","moveup","keydown","e",Camera.move);
 
     _camera.updateProjectionMatrix();
+
+    Camera.lookaround({moveX:0,moveY:0});
   }
 
   Camera.perspectiveCamera = function(){
@@ -51,6 +57,25 @@ module.exports = function(){
     return Camera;
   }
 
+  Camera.degrees = function(x,y){
+    if(x === undefined && y === undefined){
+      return {degreesX:_degreesX,degreesY:_degreesY};
+    }
+    _degreesX = (typeof x === 'number' ? x : _degreesX);
+    _degreesY = (typeof y === 'number' ? y : _degreesY);
+    return Camera;
+  }
+
+  Camera.position = function(x,y,z){
+    if(x === undefined && y === undefined && z === undefined){
+      return {x:_posX,y:_posY,z:_posZ};
+    }
+    _posX = (typeof x === 'number' ? x : _posX);
+    _posY = (typeof y === 'number' ? y : _posY);
+    _posZ = (typeof z === 'number' ? z : _posZ);
+    return Camera;
+  }
+
   Camera.toggleFreeMode = function(){
     _freemode = !_freemode;
     if(_freemode){
@@ -66,34 +91,37 @@ module.exports = function(){
     return Camera;
   }
 
-  Camera.setLatLon = function(){
-    /* need to create reverse look at position matrix for lat and lon */
-    var __lookat = _camera.getWorldDirection(),
-        __revPhi = function(n){
-          return (n / (Math.PI/180) - 90) * -1;
-        },
-        __revTheta = function(n){
-          return n / (Math.PI/180);
-        }
-
-
+  Camera.setLookat = function(x,y){
+    _degreesX = x;
+    _degreesY = y;
+    Camera.lookaround({moveX:0,moveY:0});
   }
 
   Camera.lookaround = function(e){
-    _lon += Math.min(Math.max(e.moveX, -_lookXSpeed), _lookXSpeed); //Here we limit the speed the user can look on X axis
-    _lat -= -Math.min(Math.max(e.moveY, -_lookYSpeed), _lookYSpeed); //Here we limit the speed the user can look on Y axis
+    var __target = _camera.getWorldDirection(),
+        __adjacent = 100,
+        __opposite,
+        __hypotenuse;
 
-    _lat = Math.max(95, Math.min(255,_lat)); //constrains y axis
+    /* clamp max camera angle turn limit by speed */
+    _degreesY += Math.clamp((-1*e.moveY),-_lookYSpeed,_lookYSpeed);
+    _degreesX += Math.clamp(e.moveX,-_lookXSpeed,_lookXSpeed);
+    _degreesY = Math.clamp(_degreesY,-90,90);
 
-    var __phi = (90 - _lat) * Math.PI / 180,
-        __theta = _lon * Math.PI / 180,
-        __target = _camera.getWorldDirection()
+    __hypotenuse = Math.cos(_degreesY) * __adjacent;
+    __opposite = Math.sin(_degreesY) * __hypotenuse;
 
-    __target.x = _camera.position.x + 100 * Math.sin(__phi) * Math.cos(__theta);
-    __target.y = _camera.position.y + 100 * Math.cos(__phi);
-    __target.z = _camera.position.z + 100 * Math.sin(__phi) * Math.sin(__theta);
+    var __phi = ((90 - _degreesY) * Math.PI / 180),
+        __theta = _degreesX * Math.PI / 180;
+
+    __target.x = _camera.position.x + __adjacent * Math.sin(__phi) * Math.cos(__theta);
+    __target.y = _camera.position.y + __adjacent * Math.cos(__phi);
+    __target.z = _camera.position.z + __adjacent * Math.sin(__phi) * Math.sin(__theta);
 
     _camera.lookAt(__target);
+
+    Engine.Config.set('rotation',Camera.degrees());
+
     Engine.Debugger.mouse(e);
   }
 
@@ -118,6 +146,9 @@ module.exports = function(){
         _camera.translateY(_moveSpeed);
       break;
     }
+
+    Camera.position(_camera.position.x,_camera.position.y,_camera.position.z);
+    Engine.Config.set('position',Camera.position());
   }
 
   return Camera;

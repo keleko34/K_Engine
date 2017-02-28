@@ -6,22 +6,35 @@ module.exports = function(){
 
   function VertexShader(){
     _shaderRules = [
-      "varying vec3 vWorldPosition;",
-      "varying vec3 vNormal;",
-      "varying vec3 vPosition;",
-      "varying vec2 vUv;",
-      //"varying vec3 vColor;",
-		"void main() {",
-            "vUv = uv;",
-            "vPosition = position;",
-            //"vColor = color;",
-			"vec4 worldPosition = (modelMatrix * vec4( position, 1.0 ));",
-			"vWorldPosition = worldPosition.xyz;",
+      //---------OUT------------
+        "varying vec3 vCameraPosition;",
+        "varying vec3 vWorldPosition;",
+        "varying vec3 vNormal;",
+        "varying vec3 vPosition;",
+        "varying vec2 vUv;",
+        //"varying vec3 vColor;",
+      //---------CONST-------------
+        "const float pi = 3.141592653589793238462643383279502884197169;",
+        "vec3 debugValueToColor(float p,float a, float b){",
+        " return ((p <= a) ? vec3(1.0,0.0,0.0) : ((p >= b) ? vec3(0.0,0.0,1.0) : vec3(0.0,1.0,0.0)));",
+        "}",
+      //---------UNIFORMS------------
+
+      //---------MAIN------------
+		"void main(){",
+
+          //---------ASSIGN------------
+            "vCameraPosition = cameraPosition;",
+            "vWorldPosition =  (modelMatrix * vec4( position, 1.0 )).xyz;",
             "vNormal = normal;",
+            "vPosition = position;",
+            "vUv = uv;",
+            //"vColor = color;",
+
 			"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
 		"}"
     ];
-    _rules = _injectedVars.concat(_shaderRules);
+    _rules = _shaderRules.slice(0,_shaderRules.indexOf("void main(){")).concat(_injectedVars).concat(_shaderRules.splice(_shaderRules.indexOf("void main(){"),_shaderRules.length));
     _rules.splice((_rules.length-2),0,_injectedRules);
     _rules = Array.prototype.concat.apply([],_rules);
   }

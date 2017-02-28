@@ -18,10 +18,10 @@ module.exports = function(){
       _minutes = _dateStart.getMinutes(),
       _hours = 0,
       _day = 1,
-      _weekday = _dateStart.getDay(),
       _dayEnum = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-      _day_readable = _dayEnum[_weekday]
-      _month = _dateStart.getMonth(),
+      _weekday = _dateStart.getDay(),
+      _day_readable = _dayEnum[_weekday],
+      _monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"],
       _monthEnum = [
         {name:"January",days:31},
         {name:"February",days:28},
@@ -35,6 +35,7 @@ module.exports = function(){
         {name:"October",days:31},
         {name:"November",days:30},
         {name:"December",days:31}],
+      _month = _dateStart.getMonth(),
       _month_readable = _monthEnum[_month],
       _season = 0,
       _seasonMonths = [[8,9,10],[11,0,1],[2,3,4],[5,6,7]],
@@ -117,6 +118,15 @@ module.exports = function(){
 
       global.WindowElements.time.innerHTML = Time.getStandardTime(true,true,false);
       global.WindowElements.date.innerHTML = _date_readable;
+
+      Engine.Config.set('timedate',{
+        year: _year,
+        month: _month_readable,
+        day: _day,
+        weekday:_day_readable,
+        time: _time_readable.replace(/\s/,'')
+      });
+
     }
   }
 
@@ -191,18 +201,24 @@ module.exports = function(){
 
   Time.setTime = function(h,m,s){
     _hours = (typeof h === 'number' && h < 24 ? h : _hours);
-    _minutes = (typeof h === 'number' && m < 60 ? h : _minutes);
-    _seconds = (typeof h === 'number' && s < 60 ? h : _seconds);
+    _minutes = (typeof h === 'number' && m < 60 ? m : _minutes);
+    _seconds = (typeof h === 'number' && s < 60 ? s : _seconds);
     return Time;
   }
 
   Time.setDate = function(y,m,d,dr){
     _year = (typeof y === 'number' ? y : _year);
-    _month = (typeof m === 'number' && m < _monthEnum.length ? m : _month);
-    _month_readable = (_monthEnum[_month].name);
+    if(typeof m === 'number'){
+      _month = (m < _monthEnum.length ? m : _month);
+      _month_readable = (_monthEnum[_month].name);
+    }
+    else if(typeof m === 'string'){
+      _month_readable = m;
+      _month = _monthNames.indexOf(m);
+    }
     _day = (typeof d === 'number' && d <= _monthEnum[_month].days ? d : _day);
     _day_readable = (_dayEnum.indexOf(dr) !== -1 ? dr : _day_readable);
-    
+    _weekday = _dayEnum.indexOf(_day_readable);
     _season = (_seasonMonths.reduce(function(o,v,i){
       o = (v.indexOf(_month) !== -1 ? i : o);
       return o;

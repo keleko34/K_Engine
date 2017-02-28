@@ -31,6 +31,7 @@ module.exports = function(){
     _shader = new THREE.ShaderMaterial({
       vertexShader : _vertex.rules(),
       fragmentShader : _fragment.rules(),
+      //vertexColors: THREE.VertexColors,
       uniforms : _loadeduniforms,
       side : _side,
       blending : THREE.NormalBlending,

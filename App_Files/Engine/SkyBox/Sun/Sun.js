@@ -24,12 +24,10 @@ module.exports = function(){
       "const float reileigh = 2.0;",
       "const float mieCoefficient = 0.005;",
       "const float mieDirectionalG = 0.8;",
-      "varying vec2 vUv;",
 
       "vec3 cameraPos = vec3(0.0, 0.0, 0.0);",
 
       "const float e = 2.71828182845904523536028747135266249775724709369995957;",
-      "const float pi = 3.141592653589793238462643383279502884197169;",
 
       "const float pn = 0.035;",
 
