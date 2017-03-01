@@ -1,19 +1,19 @@
 {
   "position": {
-    "x": 205.22162874907454,
-    "y": 241.67449635189087,
-    "z": 1784.5412920052229
+    "x": -324.9425763671855,
+    "y": 158.17330066971888,
+    "z": 1579.8443284226876
   },
   "rotation": {
-    "degreesX": -6848,
-    "degreesY": 2
+    "degreesX": -6846,
+    "degreesY": 11
   },
   "timedate": {
     "year": 2074,
-    "month": "September",
-    "day": 29,
-    "weekday": "Thursday",
-    "time": "20:02:00"
+    "month": "November",
+    "day": 0,
+    "weekday": "Saturday",
+    "time": "07:43:00"
   },
   "daynight": {
     "dayMinutes": 1,
