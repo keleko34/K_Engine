@@ -41,8 +41,8 @@
     "three": "^0.84.0"
   },
   "scripts": {
-    "start": "node_modules\\nw\\nwjs\\nw . --disable-devtools",
-    "debug": "node_modules\\nw\\nwjs\\nw --enable-logging --remote-debugging-port=1729 . --load-extension=Extensions\\ShaderEditorExtensionold\\src"
+    "start": "node_modules\\nw\\nwjs\\nw . --disable-devtools --disable-raf-throttling --enable-gpu-async-worker-context",
+    "debug": "node_modules\\nw\\nwjs\\nw . --disable-raf-throttling --enable-gpu-async-worker-context --enable-logging --remote-debugging-port=1729 --load-extension=Extensions\\ShaderEditorExtensionold\\src"
   },
   "maintainers": [
     {
