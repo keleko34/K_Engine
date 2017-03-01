@@ -106,7 +106,7 @@ module.exports = function(){
     /* clamp max camera angle turn limit by speed */
     _degreesY += Math.clamp((-1*e.moveY),-_lookYSpeed,_lookYSpeed);
     _degreesX += Math.clamp(e.moveX,-_lookXSpeed,_lookXSpeed);
-    _degreesY = Math.clamp(_degreesY,-90,90);
+    _degreesY = Math.clamp(_degreesY,-89,89);
 
     __hypotenuse = Math.cos(_degreesY) * __adjacent;
     __opposite = Math.sin(_degreesY) * __hypotenuse;

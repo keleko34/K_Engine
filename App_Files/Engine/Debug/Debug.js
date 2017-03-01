@@ -169,9 +169,11 @@ module.exports = function(){
         break;
         case 'time_daycycle':
           Engine.Time.setDayRateInMinutes(data[v]);
+          Engine.Config.set('daynight',{dayMinutes:Engine.Time.rateDay(),nightMinutes:Engine.Time.rateNight()})
         break;
         case 'time_nightcycle':
           Engine.Time.setNightRateInMinutes(data[v]);
+          Engine.Config.set('daynight',{dayMinutes:Engine.Time.rateDay(),nightMinutes:Engine.Time.rateNight()})
         break;
         case 'time_play':
           Engine.Time.togglePause(!data[v]);

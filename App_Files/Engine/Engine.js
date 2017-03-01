@@ -22,7 +22,12 @@ module.exports = function(){
       _Scene = CreateScene(),
       _Time = CreateTime()
       .setTime.apply({},_Config.get('timedate').time.split(':').map(function(n){return parseInt(n);}))
-      .setDate(_Config.get('timedate').year,_Config.get('timedate').month,_Config.get('timedate').day,_Config.get('timedate').weekday),
+      .setDate(parseInt(_Config.get('timedate').year),
+               _Config.get('timedate').month,
+               parseInt(_Config.get('timedate').day),
+               _Config.get('timedate').weekday)
+      .setDayRateInMinutes(parseInt(_Config.get('daynight').dayMinutes))
+      .setNightRateInMinutes(parseInt(_Config.get('daynight').nightMinutes)),
       _SkyBox = CreateSkyBox(),
       _resolution = {w:1920,h:1080},
       _test = CreateTest(),

@@ -15,9 +15,6 @@ module.exports = function(){
         //"varying vec3 vColor;",
       //---------CONST-------------
         "const float pi = 3.141592653589793238462643383279502884197169;",
-        "vec3 debugValueToColor(float p,float a, float b){",
-        " return ((p <= a) ? vec3(1.0,0.0,0.0) : ((p >= b) ? vec3(0.0,0.0,1.0) : vec3(0.0,1.0,0.0)));",
-        "}",
       //---------UNIFORMS------------
 
       //---------MAIN------------
